@@ -16,13 +16,7 @@
   --serif:'Instrument Serif',Georgia,serif;--sans:'JetBrains Mono',monospace;
 }
 html{scroll-behavior:smooth;font-size:16px}
-body{background:var(--bg);color:var(--fg);font-family:var(--sans);line-height:1.55;overflow-x:hidden;cursor:none}
-@media(pointer:coarse){body{cursor:auto}}
-
-/* CURSOR */
-#cur{position:fixed;top:0;left:0;width:12px;height:12px;border-radius:50%;background:var(--fg);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .3s,height .3s,background .3s,border .3s,opacity .3s}
-#cur.big{width:48px;height:48px;background:rgba(217,119,87,.12);border:1px solid var(--accent)}
-@media(pointer:coarse){#cur{display:none}}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);line-height:1.55;overflow-x:hidden}
 
 /* NAV */
 #nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 48px;display:flex;align-items:center;justify-content:space-between;transition:background .4s,border-color .4s;border-bottom:1px solid transparent;opacity:0;transform:translateY(-4px)}
@@ -34,7 +28,7 @@ body{background:var(--bg);color:var(--fg);font-family:var(--sans);line-height:1.
 .nav-links a::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1px;background:var(--accent);transition:width .2s}
 .nav-links a:hover{color:var(--fg)}
 .nav-links a:hover::after{width:100%}
-.btn-primary{background:var(--accent);color:var(--accent-fg);border:none;padding:10px 22px;font-family:var(--sans);font-weight:600;font-size:14px;border-radius:2px;cursor:none;display:inline-flex;align-items:center;gap:6px;text-decoration:none;transition:gap .2s,transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s;position:relative;overflow:hidden;isolation:isolate}
+.btn-primary{background:var(--accent);color:var(--accent-fg);border:none;padding:10px 22px;font-family:var(--sans);font-weight:600;font-size:14px;border-radius:2px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;text-decoration:none;transition:gap .2s,transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s;position:relative;overflow:hidden;isolation:isolate}
 .btn-primary::before{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.35) 50%,transparent 70%);transform:translateX(-150%);transition:none;z-index:1}
 .btn-primary::after{content:'';position:absolute;inset:0;background:var(--accent);border-radius:inherit;transform:scaleX(1) scaleY(1);transform-origin:center;transition:transform .4s cubic-bezier(.34,1.56,.64,1);z-index:-1}
 .btn-primary:hover{gap:14px;transform:translateY(-3px) scale(1.04);box-shadow:0 12px 32px rgba(217,119,87,.45),0 2px 8px rgba(217,119,87,.3)}
@@ -102,7 +96,7 @@ section{padding:120px 48px}
 
 /* WHAT WE DO — CARDS */
 .cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
-.card{background:var(--bg-elev);padding:40px;position:relative;overflow:hidden;cursor:none;opacity:0;transform:translateY(24px) scale(.98);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1),box-shadow .3s}
+.card{background:var(--bg-elev);padding:40px;position:relative;overflow:hidden;cursor:pointer;opacity:0;transform:translateY(24px) scale(.98);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1),box-shadow .3s}
 .card.in{opacity:1;transform:translateY(0) scale(1)}
 .card:hover{transform:translateY(-6px) scale(1)!important;box-shadow:0 20px 60px rgba(0,0,0,.5)}
 .card-svg-border{position:absolute;inset:0;pointer-events:none;overflow:visible}
@@ -136,7 +130,7 @@ section{padding:120px 48px}
 /* CASE STUDIES */
 #case-studies{background:var(--bg-elev)}
 .case-cards{display:flex;flex-direction:column;gap:24px;background:transparent}
-.case-card{background:var(--bg);display:grid;grid-template-columns:3fr 2fr;gap:0;position:relative;overflow:hidden;cursor:none;opacity:0;transform:translateY(24px) scale(.98);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1);border:1px solid var(--border);border-radius:3px}
+.case-card{background:var(--bg);display:grid;grid-template-columns:3fr 2fr;gap:0;position:relative;overflow:hidden;cursor:pointer;opacity:0;transform:translateY(24px) scale(.98);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1);border:1px solid var(--border);border-radius:3px}
 .case-card.in{opacity:1;transform:translateY(0) scale(1)}
 .case-card:hover{transform:translateY(-4px)!important}
 .case-card-svg-border{position:absolute;inset:0;pointer-events:none}
@@ -225,9 +219,6 @@ em{font-style:normal}
 
 <!-- Hairline reveal -->
 <div id="hairline"></div>
-
-<!-- Custom Cursor -->
-<div id="cur"></div>
 
 <!-- NAV -->
 <nav id="nav">
@@ -359,7 +350,7 @@ em{font-style:normal}
       <p class="section-sub">An example of the kind of system we design — drawn from a real problem we've scoped and are ready to build for the right partner.</p>
     </div>
     <div class="case-cards">
-      <div class="case-card" data-delay="0" onclick="location.href='case-studies/candidate-intelligence.html'" style="cursor:none">
+      <div class="case-card" data-delay="0" onclick="location.href='case-studies/candidate-intelligence.html'" style="cursor:pointer">
         <svg class="case-card-svg-border" id="ccsb-0" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"><rect width="100%" height="100%"/></svg>
         <div class="case-left">
           <span class="case-tag">RECRUITMENT / TALENT ACQUISITION</span>
@@ -493,24 +484,7 @@ em{font-style:normal}
 // ─── INIT ───
 lucide.createIcons();
 
-// ─── CURSOR ───
-const cur = document.getElementById('cur');
-let mx=0,my=0,cx=0,cy=0;
-const LERP=0.18;
-function lerp(a,b,t){return a+(b-a)*t}
-function moveCursor(){
-  cx=lerp(cx,mx,LERP); cy=lerp(cy,my,LERP);
-  cur.style.left=cx+'px'; cur.style.top=cy+'px';
-  requestAnimationFrame(moveCursor);
-}
-if(window.matchMedia('(pointer:fine)').matches){
-  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
-  document.querySelectorAll('a,button,.card,.case-card').forEach(el=>{
-    el.addEventListener('mouseenter',()=>cur.classList.add('big'));
-    el.addEventListener('mouseleave',()=>cur.classList.remove('big'));
-  });
-  requestAnimationFrame(moveCursor);
-}
+
 
 // ─── NAV ───
 const nav=document.getElementById('nav');

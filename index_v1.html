@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Custom AI — Bespoke AI for Industry (V5)</title>
+<title>Custom AI — Bespoke AI for Industry</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#F8F6FF;--bg-elev:#EFE9FF;--fg:#18102E;--fg-muted:#6E6490;
-  --border:#DDD6F5;--accent:#6C3FC2;--accent-fg:#FFFFFF;
-  --serif:'Lora',Georgia,serif;--sans:'Plus Jakarta Sans',sans-serif;
+  --bg:#FAF9F7;--bg-elev:#F0ECE6;--fg:#1A1917;--fg-muted:#7A756F;
+  --border:#E2DDD6;--accent:#D97757;--accent-fg:#FAF9F7;
+  --serif:'Instrument Serif',Georgia,serif;--sans:'JetBrains Mono',monospace;
 }
 html{scroll-behavior:smooth;font-size:16px}
 body{background:var(--bg);color:var(--fg);font-family:var(--sans);line-height:1.55;overflow-x:hidden}
@@ -21,20 +21,20 @@ body{background:var(--bg);color:var(--fg);font-family:var(--sans);line-height:1.
 /* NAV */
 #nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px max(48px, calc((100vw - 1200px) / 2));display:flex;align-items:center;justify-content:space-between;transition:background .4s,border-color .4s;border-bottom:1px solid transparent;opacity:0;transform:translateY(-4px)}
 #nav.loaded{opacity:1;transform:translateY(0);transition:opacity .5s .4s,transform .5s .4s,background .4s,border-color .4s}
-#nav.scrolled{background:rgba(248,246,255,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-color:var(--border)}
+#nav.scrolled{background:rgba(250,249,247,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-color:var(--border)}
 .nav-logo{font-family:var(--sans);font-weight:600;font-size:17px;letter-spacing:-.01em;color:var(--fg);text-decoration:none}
 .nav-links{display:flex;gap:32px;list-style:none}
-.nav-links a{color:#7B5CB8;text-decoration:none;font-size:13px;transition:color .2s;position:relative}
+.nav-links a{color:#4A4B6B;text-decoration:none;font-size:13px;transition:color .2s;position:relative}
 .nav-links a::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1px;background:var(--accent);transition:width .2s}
 .nav-links a:hover{color:var(--fg)}
 .nav-links a:hover::after{width:100%}
 .btn-primary{background:var(--accent);color:var(--accent-fg);border:none;padding:10px 22px;font-family:var(--sans);font-weight:600;font-size:14px;border-radius:2px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;text-decoration:none;transition:gap .2s,transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s;position:relative;overflow:hidden;isolation:isolate}
 .btn-primary::before{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.35) 50%,transparent 70%);transform:translateX(-150%);transition:none;z-index:1}
 .btn-primary::after{content:'';position:absolute;inset:0;background:var(--accent);border-radius:inherit;transform:scaleX(1) scaleY(1);transform-origin:center;transition:transform .4s cubic-bezier(.34,1.56,.64,1);z-index:-1}
-.btn-primary:hover{gap:14px;transform:translateY(-3px) scale(1.04);box-shadow:0 12px 32px rgba(108,63,194,.4),0 2px 8px rgba(108,63,194,.25)}
+.btn-primary:hover{gap:14px;transform:translateY(-3px) scale(1.04);box-shadow:0 12px 32px rgba(217,119,87,.45),0 2px 8px rgba(217,119,87,.3)}
 .btn-primary:hover::before{transform:translateX(150%);transition:transform .55s ease-in-out}
 .btn-primary:hover::after{transform:scaleX(1.06) scaleY(1.15)}
-.btn-primary:active{transform:translateY(0) scale(.98);box-shadow:0 2px 8px rgba(108,63,194,.25);transition:transform .1s,box-shadow .1s}
+.btn-primary:active{transform:translateY(0) scale(.98);box-shadow:0 2px 8px rgba(217,119,87,.3);transition:transform .1s,box-shadow .1s}
 .btn-ghost{color:var(--fg-muted);text-decoration:none;font-size:15px;font-weight:400;display:inline-flex;align-items:center;gap:6px;position:relative;transition:color .2s}
 .btn-ghost::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1px;background:var(--fg);transition:width .2s}
 .btn-ghost:hover{color:var(--fg)}
@@ -70,7 +70,7 @@ body{background:var(--bg);color:var(--fg);font-family:var(--sans);line-height:1.
 /* HERO SVG ANIMATIONS */
 @keyframes flow-particle{0%{opacity:0;offset-distance:0%}10%{opacity:1}80%{opacity:1}100%{opacity:0;offset-distance:100%}}
 @keyframes node-breathe{0%,100%{opacity:.6}50%{opacity:1}}
-@keyframes model-pulse{0%,100%{box-shadow:none}50%{box-shadow:0 0 0 6px rgba(108,63,194,.1)}}
+@keyframes model-pulse{0%,100%{box-shadow:none}50%{box-shadow:0 0 0 6px rgba(217,119,87,.1)}}
 @keyframes ping{0%{transform:scale(1);opacity:.8}100%{transform:scale(2.8);opacity:0}}
 .flow-dot{animation:flow-particle 2.4s ease-in-out infinite}
 .ping-ring{animation:ping 2s ease-out infinite}
@@ -606,11 +606,11 @@ setInterval(cyclePhrase,2200);
   // Colors from CSS vars (read computed)
   const style = getComputedStyle(document.documentElement);
   const C = {
-    bg:     '#F8F6FF',
-    border: '#DDD6F5',
-    muted:  '#6E6490',
-    fg:     '#18102E',
-    accent: '#6C3FC2',
+    bg:     '#FAF9F7',
+    border: '#E2DDD6',
+    muted:  '#7A756F',
+    fg:     '#1A1917',
+    accent: '#D97757',
   };
 
   // ── Layout ──
@@ -717,8 +717,8 @@ setInterval(cyclePhrase,2200);
     const n = nodes.model;
     if(glow > 0.01){
       const grad = ctx.createRadialGradient(n.x+n.w/2, n.y+n.h/2, 0, n.x+n.w/2, n.y+n.h/2, 80);
-      grad.addColorStop(0, `rgba(108,63,194,${glow*0.12})`);
-      grad.addColorStop(1, 'rgba(108,63,194,0)');
+      grad.addColorStop(0, `rgba(217,119,87,${glow*0.12})`);
+      grad.addColorStop(1, 'rgba(217,119,87,0)');
       ctx.fillStyle = grad;
       ctx.beginPath(); ctx.ellipse(n.x+n.w/2, n.y+n.h/2, 80, 60, 0, 0, Math.PI*2); ctx.fill();
     }
@@ -730,7 +730,7 @@ setInterval(cyclePhrase,2200);
       p.life -= 0.018;
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-      ctx.strokeStyle = `rgba(108,63,194,${p.life * 0.6})`;
+      ctx.strokeStyle = `rgba(217,119,87,${p.life * 0.6})`;
       ctx.lineWidth = 1;
       ctx.stroke();
     });
@@ -761,13 +761,13 @@ setInterval(cyclePhrase,2200);
         ctx.moveTo(tx0, py);
         ctx.lineTo(px, py);
         const grad = ctx.createLinearGradient(tx0,py,px,py);
-        grad.addColorStop(0,'rgba(108,63,194,0)');
-        grad.addColorStop(1,`rgba(108,63,194,${fade*0.7})`);
+        grad.addColorStop(0,'rgba(217,119,87,0)');
+        grad.addColorStop(1,`rgba(217,119,87,${fade*0.7})`);
         ctx.strokeStyle=grad; ctx.lineWidth=1.5; ctx.setLineDash([]); ctx.stroke();
         // Dot
         ctx.beginPath();
         ctx.arc(px, py, 2.5, 0, Math.PI*2);
-        ctx.fillStyle = `rgba(108,63,194,${fade})`;
+        ctx.fillStyle = `rgba(217,119,87,${fade})`;
         ctx.fill();
       });
     });
@@ -776,7 +776,7 @@ setInterval(cyclePhrase,2200);
     [[200,181],[320,181],[260,143]].forEach(([dx,dy],i) => {
       const pulse = Math.sin(t*1.8 + i*2.1)*0.3+0.7;
       ctx.beginPath(); ctx.arc(dx,dy,3,0,Math.PI*2);
-      ctx.fillStyle=`rgba(108,63,194,${pulse})`; ctx.fill();
+      ctx.fillStyle=`rgba(217,119,87,${pulse})`; ctx.fill();
     });
 
     requestAnimationFrame(draw);

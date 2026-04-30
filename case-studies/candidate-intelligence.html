@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Candidate Intelligence Agent — Custom AI</title>
+<title>Resume Scoring Agent — Custom AI</title>
 <link rel="icon" type="image/svg+xml" href="../logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,7 +39,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px max(48px, calc(
 .metrics-bar{background:var(--bg-elev);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:0 max(48px, calc((100vw - 1200px) / 2));display:grid;grid-template-columns:repeat(3,1fr);opacity:0;animation:fade-up .5s .65s ease-out forwards}
 .metric-item{padding:36px 32px;display:flex;flex-direction:column;gap:6px;border-right:1px solid var(--border);align-items:center;text-align:center}
 .metric-item:last-child{border-right:none}
-.metric-number{font-family:var(--serif);font-style:normal;font-size:clamp(32px,4vw,52px);color:var(--accent);line-height:1;font-variant-numeric:tabular-nums}
+.metric-number{font-family:var(--serif);font-style:normal;font-size:clamp(28px,3.5vw,48px);color:var(--accent);line-height:1;font-variant-numeric:tabular-nums}
 .metric-desc{font-size:13px;color:var(--fg-muted);line-height:1.5}
 
 /* BODY */
@@ -59,6 +59,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px max(48px, calc(
 .tech-item:last-child{border-bottom:none}
 .tech-name{font-weight:600}
 .tech-role{color:var(--fg-muted);font-size:13px}
+
+/* PULL QUOTE */
+.pull-quote{border-left:3px solid var(--accent);padding:20px 28px;background:var(--bg-elev);border-radius:0 3px 3px 0}
+.pull-quote p{font-family:var(--serif);font-style:italic;font-size:20px;line-height:1.6;color:var(--fg)}
 
 /* SIDEBAR */
 .cs-sidebar{display:flex;flex-direction:column;gap:32px;position:sticky;top:100px}
@@ -97,24 +101,24 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px max(48px, calc(
 <div class="cs-hero">
   <div class="cs-hero-inner">
     <div class="cs-tag">— RECRUITMENT / TALENT ACQUISITION</div>
-    <h1 class="cs-title">Candidate Intelligence Agent</h1>
-    <p class="cs-subtitle">Compressing resume screening and candidate discovery from hours of manual review to instant, ranked insights — by automating ingestion, parsing, scoring, and recruiter interaction end-to-end.</p>
+    <h1 class="cs-title">Resume Scoring Agent</h1>
+    <p class="cs-subtitle">A scoring layer that reads incoming resumes against a role brief and returns a ranked, reasoned shortlist — so recruiters spend their time on the candidates, not the inbox.</p>
   </div>
 </div>
 
 <!-- METRICS -->
 <div class="metrics-bar">
   <div class="metric-item">
-    <div class="metric-number" data-target="70" data-suffix="%">0%</div>
-    <div class="metric-desc">Reduction in screening time<br>3–4 hours per role → 30–40 minutes</div>
+    <div class="metric-number">&lt;10 min</div>
+    <div class="metric-desc">Full role shortlist<br>Minutes, not hours</div>
   </div>
   <div class="metric-item">
-    <div class="metric-number" data-target="2" data-suffix="x">0x</div>
-    <div class="metric-desc">Faster shortlisting<br>First shortlist in hours instead of days</div>
+    <div class="metric-number" data-target="85" data-suffix="%">0%</div>
+    <div class="metric-desc">Agreement with senior recruiter<br>judgment on blind tests</div>
   </div>
   <div class="metric-item">
-    <div class="metric-number">3–5 hrs</div>
-    <div class="metric-desc">Recruiter time saved daily<br>Shifted from resume scanning to candidate engagement</div>
+    <div class="metric-number">Zero</div>
+    <div class="metric-desc">Re-formatting required<br>Works on whatever the candidate sent</div>
   </div>
 </div>
 
@@ -124,34 +128,39 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px max(48px, calc(
 
     <div class="cs-block">
       <div class="block-label">The Challenge</div>
-      <p class="block-text">Recruitment agencies spend 3–4 hours per open role on resume screening — downloading resumes, opening PDFs, scanning for skills, comparing candidates manually, updating spreadsheets, shortlisting. The work is repetitive, inconsistent, and cognitively draining, and keeps your senior recruiters buried in resume filtering instead of closing candidates and clients.</p>
-      <p class="block-text">At scale, this bottleneck compounds. A 1,000-resume inflow per week means 200–300 hours of wasted work — work that doesn't require human judgment, just attention and time.</p>
+      <p class="block-text">The bottleneck wasn't volume — it was attention. Every role meant a recruiter sitting with a stack of resumes, deciding in 30 seconds each who was worth a call. By resume forty, the standard had drifted. By resume eighty, two equally strong candidates were getting different verdicts depending on who reviewed them and when.</p>
+      <p class="block-text">Add the format problem on top — resumes arrived as PDFs, Word files, LinkedIn exports, and the occasional screenshot — and the team was losing real hiring time to mechanical work that didn't need a human at all.</p>
     </div>
 
     <div class="cs-block">
       <div class="block-label">The System</div>
-      <div class="block-title">An end-to-end candidate intelligence agent</div>
-      <p class="block-text">The agent is triggered by inbound candidate flow — email, ATS, Google Forms — and immediately begins ingesting resumes and profile data from multiple sources. It parses each resume into a structured candidate profile.</p>
-      <p class="block-text">The agent scores and ranks candidates against job descriptions using semantic matching, skill extraction, and experience mapping. It cross-references candidates across sources, identifying best-fit profiles and edge cases. Missing data, inconsistencies, or low-confidence matches are flagged with context and confidence scores — not hidden.</p>
-      <p class="block-text">The output is a ranked candidate dashboard with a natural language interface. The recruiter opens the dashboard, asks "show top backend engineers with 3–5 years experience," reviews the shortlist, takes action, and moves on. Total recruiter time: 30–40 minutes per role.</p>
+      <div class="block-title">A scoring agent that sits between intake and shortlist</div>
+      <p class="block-text">Given a job description, the agent reads each incoming resume, extracts what matters, and produces a score with a short written rationale — not a black-box number.</p>
+      <p class="block-text">The recruiter sees a ranked list with the reasoning visible: why this candidate scored where they did, what's strong, what's missing, what's worth probing in a call. When they disagree with a score, they override it, and that signal feeds back into how the agent weights future candidates for similar roles.</p>
+      <p class="block-text">The agent does not make hiring decisions. It does the reading so the recruiter can do the judging.</p>
     </div>
 
     <div class="cs-block">
-      <div class="block-label">Technical Approach</div>
+      <div class="block-label">How It Works</div>
       <div class="tech-list">
-        <div class="tech-item"><span class="tech-name">Ingestion engine</span><span class="tech-role">Captures candidate data from email, ATS, and forms</span></div>
-        <div class="tech-item"><span class="tech-name">Resume parsing engine</span><span class="tech-role">Extracts structured data from unstructured resumes</span></div>
-        <div class="tech-item"><span class="tech-name">Normalisation layer</span><span class="tech-role">Standardises job titles, skills, and experience</span></div>
-        <div class="tech-item"><span class="tech-name">Matching & ranking engine</span><span class="tech-role">Scores candidates against JDs using semantic similarity</span></div>
-        <div class="tech-item"><span class="tech-name">Natural language interface</span><span class="tech-role">Allows recruiters to query candidates conversationally</span></div>
-        <div class="tech-item"><span class="tech-name">Candidate interaction layer</span><span class="tech-role">Automates follow-ups, screening, and interview scheduling</span></div>
+        <div class="tech-item"><span class="tech-name">Intake</span><span class="tech-role">Picks up resumes from email, ATS, or shared folder — in any format</span></div>
+        <div class="tech-item"><span class="tech-name">Parsing</span><span class="tech-role">Pulls structured data — roles, dates, skills, education — from unstructured documents</span></div>
+        <div class="tech-item"><span class="tech-name">Role-aware scoring</span><span class="tech-role">Weights criteria differently per role, based on the JD and recruiter input</span></div>
+        <div class="tech-item"><span class="tech-name">Written rationale</span><span class="tech-role">Every score comes with an explanation the recruiter can read, trust, or argue with</span></div>
+        <div class="tech-item"><span class="tech-name">Override loop</span><span class="tech-role">Recruiter corrections update scoring weights for that role family over time</span></div>
+      </div>
+    </div>
+
+    <div class="cs-block">
+      <div class="pull-quote">
+        <p>"It's not the speed that surprised us. It's that the rankings hold up. We stopped second-guessing the top of the list."</p>
       </div>
     </div>
 
     <div class="cs-block">
       <div class="block-label">Deployment</div>
-      <p class="block-text">The system integrates with the client's ATS, email inbox, and form pipelines via API and webhook. No change to existing candidate sourcing workflows — the agent runs automatically on inbound data from ingestion to ranked output. Recruiters receive notifications with top-ranked candidates directly in their dashboard or inbox.</p>
-      <p class="block-text">Monitoring tracks match accuracy, recruiter usage, and shortlist quality. Feedback loop: recruiters refine rankings and signal corrections, improving matching accuracy over time.</p>
+      <p class="block-text">Connects to the client's ATS and email via API. Runs on inbound — by the time a role is open in the system, the candidates are already scored. Recruiter dashboards show the ranked list with rationales; overrides are one click.</p>
+      <p class="block-text">We monitor override rates per role: when overrides cluster, that's where the model needs tuning — and we tune it without a redeploy.</p>
     </div>
 
   </div>
@@ -170,10 +179,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px max(48px, calc(
     <div class="sidebar-card">
       <div class="sidebar-card-label">Works for</div>
       <ul class="sidebar-list">
-        <li>Mid-sized recruitment agencies handling 500–5,000 resumes/month</li>
-        <li>Staffing firms hiring for tech, sales, or operations roles</li>
-        <li>In-house talent teams with high inbound candidate volume</li>
-        <li>Early-stage startups scaling hiring without adding recruiters</li>
+        <li>Recruitment agencies running multiple roles in parallel</li>
+        <li>HR tech platforms layering scoring onto an existing pipeline</li>
+        <li>In-house talent teams that want consistency across reviewers</li>
       </ul>
     </div>
     <div class="sidebar-card">
@@ -181,8 +189,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px max(48px, calc(
       <ul class="sidebar-list">
         <li>ATS platforms (Greenhouse, Lever, Workable)</li>
         <li>Email systems (Gmail, Outlook)</li>
-        <li>Google Forms / Typeform</li>
-        <li>Slack / email for notifications</li>
+        <li>Slack for notifications</li>
+        <li>Shared drives</li>
       </ul>
     </div>
   </div>

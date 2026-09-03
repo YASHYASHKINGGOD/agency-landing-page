@@ -1,0 +1,2218 @@
+@charset "UTF-8";
+/* ==========================================================================
+   Custom AI — shared stylesheet
+   Design system: DESIGN.md (Coinbase). Build spec: blueprint.md.
+   Loaded by: index.html, case-studies/candidate-intelligence.html,
+              case-studies/template.html.
+
+   Rules this file obeys, literally:
+     - Every value below :root is a var(). No hex outside :root.
+     - Display type is Inter 400. Never bolded. Never 500/600/700.
+     - #0052ff is the only action colour and stays scarce.
+     - One shadow tier: 0 4px 12px rgba(0,0,0,.04). Nothing else casts.
+     - Pill (100px) for interactive, 24px for cards, 9999px for icon plates.
+     - No text-transform anywhere. Every string renders as authored.
+   ========================================================================== */
+
+/* ==========================================================================
+   1. TOKENS — every key from the DESIGN.md YAML
+   ========================================================================== */
+
+:root {
+
+  /* ---- colors ---------------------------------------------------------- */
+  --color-primary:              #0052ff;
+  --color-primary-active:       #1F24CD;  /* YAML "1F24CD" — missing # in source */
+  --color-primary-disabled:     #a8b8cc;  /* declared; no disabled CTA exists    */
+  --color-ink:                  #0a0b0d;
+  --color-body:                 #5b616e;
+  --color-body-strong:          #0a0b0d;
+  --color-muted:                #7c828a;
+  --color-muted-soft:           #a8acb3;
+  --color-hairline:             #dee1e6;
+  --color-hairline-soft:        #eef0f3;
+  --color-canvas:               #ffffff;
+  --color-surface-soft:         #f7f7f7;
+  --color-surface-card:         #ffffff;
+  --color-surface-strong:       #eef0f3;
+  --color-surface-dark:         #0a0b0d;
+  --color-surface-dark-elevated:#16181c;
+  --color-on-primary:           #ffffff;
+  --color-on-dark:              #ffffff;
+  --color-on-dark-soft:         #a8acb3;
+  --color-semantic-up:          #05b169;  /* declared for token completeness;    */
+  --color-semantic-down:        #cf202f;  /* no trading data on this site — UNUSED */
+  --color-accent-yellow:        #ffd600;  /* YAML "ffd600" — missing #. UNUSED.  */
+
+  /* Surface aliases — the YAML keys read as surfaces, so both spellings resolve. */
+  --surface-soft:          var(--color-surface-soft);
+  --surface-card:          var(--color-surface-card);
+  --surface-strong:        var(--color-surface-strong);
+  --surface-dark:          var(--color-surface-dark);
+  --surface-dark-elevated: var(--color-surface-dark-elevated);
+
+  /* ---- derived on-dark values -----------------------------------------
+     Not DESIGN.md tokens. Derived white alphas, declared here so that the
+     "no literal outside :root" rule holds for the dark surfaces too.
+
+     The two below are UNUSED since the hero mockups became
+     product-ui-card-light: they were .mock-card-a / .mock-card-b's borders and
+     are now var(--color-hairline). Retained as the on-dark counterparts of
+     --color-hairline / --color-hairline-soft for any future dark card.      */
+  --on-dark-line:        rgba(255, 255, 255, .06);  /* UNUSED */
+  --on-dark-line-strong: rgba(255, 255, 255, .08);  /* UNUSED */
+  --on-dark-line-btn:    rgba(255, 255, 255, .24);
+  /* the on-dark counterpart of --color-hairline: the step-rule divider inside a
+     dark product-UI card. .06/.08 read as absent on #16181c; .24 is the
+     button-border weight and reads too loud for a divider. */
+  --on-dark-rule:        rgba(255, 255, 255, .12);
+  --on-dark-fill:        rgba(255, 255, 255, .06);
+  /* Both UNUSED since the hero mockups went light: --on-dark-fill-strong was
+     .mock-src-plate's fill (now --color-surface-strong) and --on-dark-dot was
+     .mock-dot (now --color-muted). Kept as the on-dark counterparts of
+     --color-surface-strong / --color-muted. */
+  --on-dark-fill-strong: rgba(255, 255, 255, .08);  /* UNUSED */
+  --on-dark-dot:         rgba(255, 255, 255, .6);   /* UNUSED */
+  --nav-bg-light:        rgba(255, 255, 255, .88);
+  --case-tint:           rgba(0, 82, 255, .04);
+
+  /* ---- typography: families -------------------------------------------
+     CoinbaseDisplay / CoinbaseSans / CoinbaseMono are licensed. DESIGN.md's
+     documented substitutes: Inter (display 400, body 400/600/700) and
+     JetBrains Mono 500 for every number.                                   */
+  --font-display: 'Inter', -apple-system, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-body:    var(--font-display);
+  --font-mono:    'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* ---- typography: scale ----------------------------------------------
+     Size / weight / line-height per the DESIGN.md hierarchy table, exactly.
+
+     LETTER-SPACING: DESIGN.md's YAML gives absolute px (-2px at 80px ≈ -2.5%).
+     The substitute note specifies -1.5% for the Inter stand-in, because Inter
+     is wider-set than CoinbaseDisplay. So every token DESIGN.md tracks
+     negatively is set to -0.015em, and every token it tracks at 0 stays 0.  */
+
+  --type-display-mega-size:            80px;
+  --type-display-mega-weight:          400;
+  --type-display-mega-line-height:     1.0;
+  --type-display-mega-letter-spacing:  -0.015em;
+
+  --type-display-xl-size:              64px;
+  --type-display-xl-weight:            400;
+  --type-display-xl-line-height:       1.0;
+  --type-display-xl-letter-spacing:    -0.015em;
+
+  --type-display-lg-size:              52px;
+  --type-display-lg-weight:            400;
+  --type-display-lg-line-height:       1.0;
+  --type-display-lg-letter-spacing:    -0.015em;
+
+  --type-display-md-size:              44px;
+  --type-display-md-weight:            400;
+  --type-display-md-line-height:       1.09;
+  --type-display-md-letter-spacing:    -0.015em;
+
+  --type-display-sm-size:              36px;
+  --type-display-sm-weight:            400;
+  --type-display-sm-line-height:       1.11;
+  --type-display-sm-letter-spacing:    -0.015em;
+
+  --type-title-lg-size:                32px;
+  --type-title-lg-weight:              400;
+  --type-title-lg-line-height:         1.13;
+  --type-title-lg-letter-spacing:      -0.015em;
+
+  --type-title-md-size:                18px;
+  --type-title-md-weight:              600;
+  --type-title-md-line-height:         1.33;
+  --type-title-md-letter-spacing:      0;
+
+  --type-title-sm-size:                16px;
+  --type-title-sm-weight:              600;
+  --type-title-sm-line-height:         1.25;
+  --type-title-sm-letter-spacing:      0;
+
+  --type-body-md-size:                 16px;
+  --type-body-md-weight:               400;
+  --type-body-md-line-height:          1.5;
+  --type-body-md-letter-spacing:       0;
+
+  --type-body-strong-size:             16px;
+  --type-body-strong-weight:           700;
+  --type-body-strong-line-height:      1.5;
+  --type-body-strong-letter-spacing:   0;
+
+  --type-body-sm-size:                 14px;
+  --type-body-sm-weight:               400;
+  --type-body-sm-line-height:          1.5;
+  --type-body-sm-letter-spacing:       0;
+
+  --type-caption-size:                 13px;
+  --type-caption-weight:               400;
+  --type-caption-line-height:          1.5;
+  --type-caption-letter-spacing:       0;
+
+  --type-caption-strong-size:          12px;
+  --type-caption-strong-weight:        600;
+  --type-caption-strong-line-height:   1.5;
+  --type-caption-strong-letter-spacing:0;
+
+  --type-number-display-size:          18px;
+  --type-number-display-weight:        500;
+  --type-number-display-line-height:   1.4;
+  --type-number-display-letter-spacing:0;
+
+  --type-button-size:                  16px;
+  --type-button-weight:                600;
+  --type-button-line-height:           1.15;
+  --type-button-letter-spacing:        0;
+
+  --type-nav-link-size:                14px;
+  --type-nav-link-weight:              500;
+  --type-nav-link-line-height:         1.4;
+  --type-nav-link-letter-spacing:      0;
+
+  /* Two documented extensions, and only two.
+     hero-lede: title-md's size at body-md's weight. Changes weight only.
+     number-lg: number-display's face and weight at title-lg's size.       */
+  --type-hero-lede-size:               18px;
+  --type-hero-lede-weight:             400;
+  --type-hero-lede-line-height:        1.55;
+  --type-hero-lede-letter-spacing:     0;
+
+  --type-number-lg-size:               32px;
+  --type-number-lg-weight:             500;
+  --type-number-lg-line-height:        1.2;
+  --type-number-lg-letter-spacing:     0;
+
+  /* ---- rounded ---------------------------------------------------------- */
+  --rounded-none: 0px;
+  --rounded-xs:   4px;
+  --rounded-sm:   8px;
+  --rounded-md:   12px;
+  --rounded-lg:   16px;
+  --rounded-xl:   24px;
+  --rounded-pill: 100px;
+  --rounded-full: 9999px;
+
+  /* ---- spacing — 4px base ----------------------------------------------- */
+  --space-xxs:     4px;
+  --space-xs:      8px;
+  --space-sm:      12px;
+  --space-base:    16px;
+  --space-md:      20px;
+  --space-lg:      24px;
+  --space-xl:      32px;
+  --space-xxl:     48px;
+  --space-section: 96px;
+
+  /* ---- component geometry ----------------------------------------------- */
+  --nav-height:      64px;
+  --btn-height:      44px;
+  --btn-lg-height:   56px;
+  --input-height:    48px;
+  --icon-plate:      32px;   /* asset-icon-circular */
+  --container-max:   1248px; /* 1248 − 2×24 gutter = 1200px of content */
+  --container-pad:   24px;
+  --scroll-offset:   88px;
+
+  /* ---- elevation — ONE tier, site-wide ---------------------------------- */
+  --shadow: 0 4px 12px rgba(0, 0, 0, .04);
+
+  /* ---- motion — two curves and nothing else ----------------------------- */
+  --ease:          cubic-bezier(.2, .6, .2, 1);
+  --ease-striker:  cubic-bezier(.65, 0, .35, 1);
+  --dur-reveal:    .5s;
+  --dur-state:     .2s;
+  --dur-swap:      .16s;
+}
+
+/* {colors.muted} #7c828a is 3.88:1 on #ffffff and 3.62:1 on #f7f7f7 — it FAILS
+   WCAG AA below 24px. There are exactly two consumers site-wide, and neither is
+   light-surface text:
+     · .mock-dot — an 8px decorative glyph on the hero card's --color-canvas.
+       Under 24px, but the AA floor governs TEXT, not glyphs, so it is exempt.
+       It is the only light-surface use of muted left after the hero flip.
+     · .step-num — 32px, and since #how-we-work became .band-dark it is painted
+       on --color-surface-dark-elevated #16181c, where it measures 4.59:1.
+   All light-surface TEXT under 24px uses --color-body #5b616e (6.21:1); on
+   #0a0b0d muted measures 5.08:1. This overrides the documented colour of
+   legal-band and footer-link. Deliberate. Do not "restore" it. */
+
+
+/* ==========================================================================
+   2. RESET + BASE
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: var(--scroll-offset);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+body {
+  margin: 0;
+  background: var(--color-canvas);
+  color: var(--color-body);
+  font-family: var(--font-body);
+  font-size: var(--type-body-md-size);
+  font-weight: var(--type-body-md-weight);
+  line-height: var(--type-body-md-line-height);
+  letter-spacing: var(--type-body-md-letter-spacing);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+body.nav-open { overflow: hidden; }
+
+h1, h2, h3, h4, p, figure, blockquote { margin: 0; }
+ul, ol { margin: 0; padding: 0; }
+img, svg, canvas { display: block; max-width: 100%; }
+img { height: auto; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; }
+a { color: inherit; }
+
+/* The pinned Google Fonts URL carries no italic axis, so font-style:italic would
+   render as faux-oblique on 52px display type. <em> stays upright and emphasis
+   is carried by colour instead. This is NOT the old defect — do not turn it
+   back into italics. */
+em { font-style: normal; }
+
+/* Headings inherit display type from their component class; never bolded. */
+h1, h2, h3 { font-weight: var(--type-display-mega-weight); }
+
+section[id] { scroll-margin-top: var(--scroll-offset); }
+
+
+/* ==========================================================================
+   3. TYPE UTILITIES — one class per DESIGN.md token
+   ========================================================================== */
+
+.t-display-mega,
+.t-display-xl,
+.t-display-lg,
+.t-display-md,
+.t-display-sm,
+.t-title-lg { font-family: var(--font-display); font-weight: 400; }
+
+.t-display-mega { font-size: var(--type-display-mega-size); line-height: var(--type-display-mega-line-height); letter-spacing: var(--type-display-mega-letter-spacing); }
+.t-display-xl   { font-size: var(--type-display-xl-size);   line-height: var(--type-display-xl-line-height);   letter-spacing: var(--type-display-xl-letter-spacing); }
+.t-display-lg   { font-size: var(--type-display-lg-size);   line-height: var(--type-display-lg-line-height);   letter-spacing: var(--type-display-lg-letter-spacing); }
+.t-display-md   { font-size: var(--type-display-md-size);   line-height: var(--type-display-md-line-height);   letter-spacing: var(--type-display-md-letter-spacing); }
+.t-display-sm   { font-size: var(--type-display-sm-size);   line-height: var(--type-display-sm-line-height);   letter-spacing: var(--type-display-sm-letter-spacing); }
+.t-title-lg     { font-size: var(--type-title-lg-size);     line-height: var(--type-title-lg-line-height);     letter-spacing: var(--type-title-lg-letter-spacing); }
+
+.t-title-md     { font-family: var(--font-body); font-size: var(--type-title-md-size);      font-weight: var(--type-title-md-weight);      line-height: var(--type-title-md-line-height);      letter-spacing: var(--type-title-md-letter-spacing); }
+.t-title-sm     { font-family: var(--font-body); font-size: var(--type-title-sm-size);      font-weight: var(--type-title-sm-weight);      line-height: var(--type-title-sm-line-height);      letter-spacing: var(--type-title-sm-letter-spacing); }
+.t-body-md      { font-family: var(--font-body); font-size: var(--type-body-md-size);       font-weight: var(--type-body-md-weight);       line-height: var(--type-body-md-line-height);       letter-spacing: var(--type-body-md-letter-spacing); }
+.t-body-strong  { font-family: var(--font-body); font-size: var(--type-body-strong-size);   font-weight: var(--type-body-strong-weight);   line-height: var(--type-body-strong-line-height);   letter-spacing: var(--type-body-strong-letter-spacing); }
+.t-body-sm      { font-family: var(--font-body); font-size: var(--type-body-sm-size);       font-weight: var(--type-body-sm-weight);       line-height: var(--type-body-sm-line-height);       letter-spacing: var(--type-body-sm-letter-spacing); }
+.t-caption      { font-family: var(--font-body); font-size: var(--type-caption-size);       font-weight: var(--type-caption-weight);       line-height: var(--type-caption-line-height);       letter-spacing: var(--type-caption-letter-spacing); }
+.t-caption-strong { font-family: var(--font-body); font-size: var(--type-caption-strong-size); font-weight: var(--type-caption-strong-weight); line-height: var(--type-caption-strong-line-height); letter-spacing: var(--type-caption-strong-letter-spacing); }
+.t-button       { font-family: var(--font-body); font-size: var(--type-button-size);        font-weight: var(--type-button-weight);        line-height: var(--type-button-line-height);        letter-spacing: var(--type-button-letter-spacing); }
+.t-nav-link     { font-family: var(--font-body); font-size: var(--type-nav-link-size);      font-weight: var(--type-nav-link-weight);      line-height: var(--type-nav-link-line-height);      letter-spacing: var(--type-nav-link-letter-spacing); }
+
+.t-number-display { font-family: var(--font-mono); font-size: var(--type-number-display-size); font-weight: var(--type-number-display-weight); line-height: var(--type-number-display-line-height); font-variant-numeric: tabular-nums; }
+.t-number-lg      { font-family: var(--font-mono); font-size: var(--type-number-lg-size);      font-weight: var(--type-number-lg-weight);      line-height: var(--type-number-lg-line-height);      font-variant-numeric: tabular-nums; }
+.t-hero-lede      { font-family: var(--font-body); font-size: var(--type-hero-lede-size);     font-weight: var(--type-hero-lede-weight);      line-height: var(--type-hero-lede-line-height);      letter-spacing: var(--type-hero-lede-letter-spacing); }
+
+/* "CoinbaseMono on every number" — surgical inline use, e.g. the 10+ in
+   "10+ products". Inherits its size from the parent. */
+.mono {
+  font-family: var(--font-mono);
+  font-weight: var(--type-number-display-weight);
+  font-variant-numeric: tabular-nums;
+}
+
+
+/* ==========================================================================
+   4. LAYOUT PRIMITIVES
+   ========================================================================== */
+
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-pad);
+}
+
+.band-canvas,
+.band-soft,
+.band-dark {
+  padding-block: var(--space-section);
+}
+
+.band-canvas { background: var(--color-canvas); color: var(--color-body); }
+.band-soft   { background: var(--color-surface-soft); color: var(--color-body); }
+.band-dark   { background: var(--color-surface-dark); color: var(--color-on-dark-soft); }
+
+
+/* ==========================================================================
+   5. ACCESSIBILITY — skip link, sr-only, focus
+   ========================================================================== */
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 300;
+}
+
+.skip-link:focus {
+  left: var(--space-base);
+  top: var(--space-base);
+  width: auto; height: auto;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--btn-height);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  border-radius: var(--rounded-pill);
+  font-family: var(--font-body);
+  font-size: var(--type-button-size);
+  font-weight: var(--type-button-weight);
+  line-height: var(--type-button-line-height);
+  text-decoration: none;
+}
+
+/* Blueprint §5.11 wrote `border-radius: inherit` into this rule. Removed on
+   purpose: it would rewrite the ELEMENT's own radius on focus (a pill CTA
+   inside a square container would square off mid-focus, breaking the
+   no-sharp-corners rule). Every current browser already draws the outline
+   following the element's own border-radius, so the line was both unneeded
+   and harmful. Do not re-add it. */
+:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+.band-dark :focus-visible,
+.site-nav.on-dark :focus-visible,
+.nav-sheet :focus-visible {
+  outline-color: var(--color-on-dark);
+}
+
+
+/* ==========================================================================
+   6. MOTION — reveal states
+   Two curves only. Reveals are opacity + translateY(16px). Nothing scales,
+   blurs or rotates.
+   ========================================================================== */
+
+.eyebrow,
+.section-sub,
+.hero-sub,
+.hero-ctas,
+.status-line,
+.card,
+.case-card,
+.process-step,
+.scroll-fade,
+.cs-block,
+.sidebar-card,
+.cs-reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity var(--dur-reveal) var(--ease),
+              transform var(--dur-reveal) var(--ease);
+}
+
+.eyebrow.in,
+.section-sub.in,
+.hero-sub.in,
+.hero-ctas.in,
+.status-line.in,
+.card.in,
+.case-card.in,
+.process-step.in,
+.scroll-fade.in,
+.cs-block.in,
+.sidebar-card.in,
+.cs-reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Word-split reveal. The splitter keeps element nodes (<em>, the accent span)
+   whole as one word, so the accent-word rule survives the split. */
+.word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity var(--dur-reveal) var(--ease),
+              transform var(--dur-reveal) var(--ease);
+}
+
+.word.in { opacity: 1; transform: none; }
+
+/* The load striker: the site's first pixel of brand voltage. */
+#hairline {
+  position: fixed;
+  left: 0;
+  top: 50vh;
+  width: 100%;
+  height: 1px;
+  background: var(--color-primary);
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: center;
+  z-index: 200;
+  pointer-events: none;
+  transition: opacity .32s linear, transform .52s var(--ease-striker);
+}
+
+#hairline.in  { opacity: 1; transform: scaleX(1); }
+#hairline.out { opacity: 0; }
+
+
+/* ==========================================================================
+   7. BUTTONS
+   Every CTA is a 100px pill. Nothing lifts. Nothing scales.
+   ========================================================================== */
+
+.btn-primary,
+.btn-secondary-light,
+.btn-secondary-dark,
+.btn-ghost,
+.btn-text,
+.booking-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  border-radius: var(--rounded-pill);
+  text-decoration: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: var(--type-button-size);
+  font-weight: var(--type-button-weight);
+  line-height: var(--type-button-line-height);
+  letter-spacing: var(--type-button-letter-spacing);
+  transition: background-color var(--dur-swap) linear,
+              border-color var(--dur-swap) linear,
+              gap var(--dur-state) var(--ease);
+}
+
+/* The trailing → glyph, where it lives in its own <span>, nudges on hover. */
+.btn-primary > span,
+.btn-secondary-light > span,
+.btn-secondary-dark > span,
+.btn-ghost > span {
+  transition: transform var(--dur-state) var(--ease);
+}
+
+.btn-primary:hover > span,
+.btn-secondary-light:hover > span,
+.btn-secondary-dark:hover > span,
+.btn-ghost:hover > span { transform: translateX(3px); }
+
+/* button-primary — the signature Coinbase Blue pill */
+.btn-primary {
+  min-height: var(--btn-height);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+.btn-primary:hover,
+.btn-primary:active { background: var(--color-primary-active); }
+
+/* button-pill-cta — the prouder 56px stance (hero + contact) */
+.btn-primary.btn-lg,
+.booking-btn {
+  min-height: var(--btn-lg-height);
+  padding: var(--space-base) var(--space-xl);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+.booking-btn:hover,
+.booking-btn:active { background: var(--color-primary-active); }
+
+/* button-secondary-light */
+.btn-secondary-light {
+  min-height: var(--btn-height);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-surface-strong);
+  color: var(--color-ink);
+}
+.btn-secondary-light:hover { background: var(--color-hairline); }
+
+/* button-secondary-light at the button-pill-cta stance — the hero's second CTA.
+   16/32 padding, not the ghost's 15/31: there is no 1px border to absorb. */
+.btn-secondary-light.btn-lg {
+  min-height: var(--btn-lg-height);
+  padding: var(--space-base) var(--space-xl);
+}
+
+/* button-secondary-dark */
+.btn-secondary-dark {
+  min-height: var(--btn-height);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-surface-dark-elevated);
+  color: var(--color-on-dark);
+}
+
+/* button-outline-on-dark. No longer used on index (the hero's secondary CTA is
+   now button-secondary-light); retained as the documented on-dark component and
+   as the sibling definition of .site-nav.on-dark .nav-cta, which still ships.
+   1px border sits inside the height. */
+.btn-ghost {
+  min-height: var(--btn-height);
+  padding: 11px 19px;
+  background: transparent;
+  color: var(--color-on-dark);
+  border: 1px solid var(--on-dark-line-btn);
+}
+.btn-ghost:hover {
+  border-color: var(--color-on-dark);
+  background: var(--on-dark-fill);
+}
+.btn-ghost.btn-lg {
+  min-height: var(--btn-lg-height);
+  padding: 15px 31px;
+}
+
+/* button-tertiary-text */
+.btn-text {
+  padding: var(--space-sm) 0;
+  min-height: var(--btn-height);
+  background: transparent;
+  color: var(--color-primary);
+}
+.btn-text:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* button-primary-disabled — declared per DESIGN.md; no disabled CTA ships. */
+.btn-primary[aria-disabled="true"],
+.btn-primary:disabled {
+  background: var(--color-primary-disabled);
+  cursor: not-allowed;
+}
+
+
+/* ==========================================================================
+   8. NAVIGATION
+   ========================================================================== */
+
+.site-nav,
+.cs-nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: var(--nav-height);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid transparent;
+  transition: background-color .25s linear, border-color .25s linear,
+              opacity .4s var(--ease), transform .4s var(--ease);
+}
+
+/* Default = over a light band: translucent white, blurred, hairline rule. */
+.site-nav,
+.cs-nav {
+  background: var(--nav-bg-light);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-bottom-color: var(--color-hairline);
+}
+
+/* over #how-we-work / #contact: the documented top-nav-on-dark —
+   {colors.surface-dark}, white logo, outlined CTA. BOTH dark bands now scroll
+   through the nav, so the opaque token is load-bearing for both: a transparent
+   strip would let the process cards and the centred .section-sub print straight
+   over the nav links. Do not "restore" transparent. */
+.site-nav.on-dark {
+  background: var(--color-surface-dark);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border-bottom-color: transparent;
+}
+
+.site-nav { opacity: 0; transform: translateY(-8px); }
+.site-nav.loaded { opacity: 1; transform: none; }
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  width: 100%;
+}
+
+/* ---- logo: two stacked PNGs that cross-fade, no src swap ---------------- */
+.nav-logo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: var(--btn-height);
+  margin-right: auto;
+  text-decoration: none;
+}
+.nav-logo img {
+  height: 30px;
+  width: auto;
+  transition: opacity .25s linear;
+}
+.nav-logo .logo-light {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+}
+.site-nav.on-dark .nav-logo .logo-dark  { opacity: 0; }
+.site-nav.on-dark .nav-logo .logo-light { opacity: 1; }
+
+/* ---- links -------------------------------------------------------------- */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xxs);
+  list-style: none;
+}
+.nav-links a {
+  display: flex;
+  align-items: center;
+  height: var(--btn-height);
+  padding-inline: var(--space-sm);
+  font-family: var(--font-body);
+  font-size: var(--type-nav-link-size);
+  font-weight: var(--type-nav-link-weight);
+  line-height: var(--type-nav-link-line-height);
+  letter-spacing: var(--type-nav-link-letter-spacing);
+  color: var(--color-body);
+  text-decoration: none;
+  border-radius: var(--rounded-sm);
+  transition: color var(--dur-swap) linear;
+}
+.nav-links a:hover {
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+.site-nav.on-dark .nav-links a { color: var(--color-on-dark-soft); }
+.site-nav.on-dark .nav-links a:hover { color: var(--color-on-dark); }
+
+/* ---- nav CTA ------------------------------------------------------------ */
+.nav-cta { flex: 0 0 auto; }
+
+/* .on-dark swaps the blue pill for the outlined variant — the persistent
+   chrome exemption that holds the two-blues-per-band budget. */
+.site-nav.on-dark .nav-cta {
+  background: transparent;
+  color: var(--color-on-dark);
+  border: 1px solid var(--on-dark-line-btn);
+  padding: 11px 19px;
+}
+.site-nav.on-dark .nav-cta:hover {
+  background: var(--on-dark-fill);
+  border-color: var(--color-on-dark);
+}
+
+/* ---- case-study nav ----------------------------------------------------- */
+/* The case-study nav carries the wordmark and the back link as one left-hand
+   group, with the booking CTA on the right. The wordmark steps out below 640px
+   so the back link and the CTA keep their 44px targets on a 320px screen. */
+.cs-nav .nav-inner { justify-content: space-between; }
+.cs-nav-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  min-width: 0;
+}
+.cs-nav .nav-logo { margin-right: 0; }
+.nav-back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: var(--btn-height);
+  padding-right: var(--space-sm);
+  font-family: var(--font-body);
+  font-size: var(--type-nav-link-size);
+  font-weight: var(--type-nav-link-weight);
+  line-height: var(--type-nav-link-line-height);
+  color: var(--color-body);
+  text-decoration: none;
+  border-radius: var(--rounded-sm);
+  transition: color var(--dur-swap) linear;
+}
+.nav-back:hover { color: var(--color-ink); }
+.nav-back svg, .nav-back i { flex: 0 0 auto; }
+
+/* ---- hamburger: two CSS bars, never a CDN icon -------------------------- */
+.nav-toggle {
+  display: none;
+  position: relative;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 auto;
+  border-radius: var(--rounded-full);
+  cursor: pointer;
+}
+.nav-toggle::before,
+.nav-toggle::after {
+  content: '';
+  position: absolute;
+  left: 11px;
+  width: 22px;
+  height: 1.5px;
+  background: var(--color-ink);
+  transition: transform .24s var(--ease), top .24s var(--ease);
+}
+.nav-toggle::before { top: 18px; }
+.nav-toggle::after  { top: 25px; }
+.site-nav.on-dark .nav-toggle::before,
+.site-nav.on-dark .nav-toggle::after { background: var(--color-on-dark); }
+.nav-toggle[aria-expanded="true"]::before { top: 21px; transform: rotate(45deg); }
+.nav-toggle[aria-expanded="true"]::after  { top: 21px; transform: rotate(-45deg); }
+
+/* ---- mobile sheet ------------------------------------------------------- */
+.nav-sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  display: none;
+  flex-direction: column;
+  padding: var(--space-base) var(--container-pad) var(--space-xl);
+  background: var(--color-surface-dark);
+  color: var(--color-on-dark);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .24s var(--ease), transform .24s var(--ease);
+}
+.nav-sheet.open { display: flex; }
+.nav-sheet.shown { opacity: 1; transform: none; }
+
+.nav-sheet-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--btn-height);
+}
+.nav-sheet-top img { height: 28px; width: auto; }
+
+.nav-sheet-close {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 auto;
+  border-radius: var(--rounded-full);
+  cursor: pointer;
+}
+.nav-sheet-close::before,
+.nav-sheet-close::after {
+  content: '';
+  position: absolute;
+  left: 11px;
+  top: 21px;
+  width: 22px;
+  height: 1.5px;
+  background: var(--color-on-dark);
+}
+.nav-sheet-close::before { transform: rotate(45deg); }
+.nav-sheet-close::after  { transform: rotate(-45deg); }
+
+.nav-sheet-links {
+  list-style: none;
+  margin-top: var(--space-xxl);
+  flex: 1 1 auto;
+}
+.nav-sheet-links a {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  color: var(--color-on-dark);
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-size: var(--type-title-lg-size);
+  font-weight: var(--type-title-lg-weight);
+  line-height: var(--type-title-lg-line-height);
+  letter-spacing: var(--type-title-lg-letter-spacing);
+}
+.nav-sheet-cta {
+  width: 100%;
+  min-height: 48px;
+  margin-top: var(--space-lg);
+}
+
+
+/* ==========================================================================
+   9. SECTION FURNITURE — eyebrow, headline, sub, split head
+   ========================================================================== */
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: var(--type-caption-strong-size);
+  font-weight: var(--type-caption-strong-weight);
+  line-height: var(--type-caption-strong-line-height);
+  letter-spacing: var(--type-caption-strong-letter-spacing);
+  color: var(--color-body);
+}
+.band-dark .eyebrow { color: var(--color-on-dark-soft); }
+
+.section-headline {
+  font-family: var(--font-display);
+  font-size: var(--type-display-lg-size);
+  font-weight: var(--type-display-lg-weight);
+  line-height: var(--type-display-lg-line-height);
+  letter-spacing: var(--type-display-lg-letter-spacing);
+  color: var(--color-ink);
+  text-wrap: pretty;
+}
+.band-dark .section-headline { color: var(--color-on-dark); }
+
+/* The system's sanctioned inline accent moment. Upright, weight 400, no
+   underline, no hover state — blue-as-text lives only in display headlines. */
+.section-headline em {
+  color: var(--color-primary);
+  font-weight: var(--type-display-lg-weight);
+}
+
+.section-sub {
+  font-family: var(--font-body);
+  font-size: var(--type-body-md-size);
+  font-weight: var(--type-body-md-weight);
+  line-height: var(--type-body-md-line-height);
+  color: var(--color-body);
+  max-width: 46ch;
+}
+.band-dark .section-sub { color: var(--color-on-dark-soft); }
+
+/* split head: eyebrow + h2 left, sub bottom-aligned right */
+.section-head {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  gap: var(--space-xxl);
+  align-items: end;
+  margin-bottom: 64px;
+}
+.section-head .eyebrow { margin-bottom: var(--space-lg); }
+
+
+/* ==========================================================================
+   10. HERO — hero-band-light
+   ========================================================================== */
+
+.hero {
+  position: relative;
+  overflow-x: clip;
+  min-height: max(100svh, 720px);
+  display: flex;
+  align-items: center;
+  padding: 160px 0 var(--space-section);
+  background: var(--color-canvas);
+  color: var(--color-body);
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+  align-items: center;
+  width: 100%;
+}
+
+.hero-copy { max-width: 560px; }
+
+.hero-copy .eyebrow { margin-bottom: var(--space-lg); }
+
+.hero-headline {
+  font-family: var(--font-display);
+  font-size: var(--type-display-mega-size);
+  font-weight: var(--type-display-mega-weight);
+  line-height: var(--type-display-mega-line-height);
+  letter-spacing: var(--type-display-mega-letter-spacing);
+  color: var(--color-ink);
+  max-width: 15ch;
+  text-wrap: pretty;
+  margin-bottom: 28px;
+}
+
+/* Retained in markup because the word-splitter depends on element nodes
+   surviving whole. On the light hero it inherits ink. Blue would measure
+   5.70:1 here and would be legible — it is left ink on purpose: the hero
+   already spends its two blues on the CTA pill and the schematic circuit, and
+   a third would break the one-or-two-per-band budget. */
+.accent-word { color: inherit; }
+
+.hero-sub {
+  font-family: var(--font-body);
+  font-size: var(--type-hero-lede-size);
+  font-weight: var(--type-hero-lede-weight);
+  line-height: var(--type-hero-lede-line-height);
+  color: var(--color-body);
+  max-width: 52ch;
+  margin-bottom: var(--space-xl);
+}
+
+/* ---- status chip (the machine ticker) ---------------------------------- */
+.status-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 40px;
+  padding-inline: var(--space-base);
+  margin-bottom: 40px;
+  background: var(--color-surface-strong);
+  border-radius: var(--rounded-pill);
+  font-family: var(--font-mono);
+  font-size: var(--type-body-sm-size);
+  font-weight: var(--type-number-display-weight);
+  line-height: 1;
+}
+.status-arrow  { color: var(--color-body); }
+.status-cursor { color: var(--color-ink); animation: status-blink 1s steps(1, end) infinite; }
+
+.status-text-wrap {
+  position: relative;
+  height: 28px;
+  min-width: 172px;
+  overflow: hidden;
+}
+.status-phrase {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  height: 28px;
+  white-space: nowrap;
+  color: var(--color-ink);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .28s var(--ease), transform .28s var(--ease);
+}
+.status-phrase.active { opacity: 1; transform: none; }
+.status-phrase.exit   { opacity: 0; transform: translateY(-8px); }
+
+@keyframes status-blink {
+  0%, 50%   { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+
+/* ---- hero CTAs ---------------------------------------------------------- */
+.hero-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-base);
+}
+
+
+/* ==========================================================================
+   11. HERO MOCKUP STACK — product-ui-card-light ×2
+   Depth is the 1px hairline outline, per product-ui-card-light. DESIGN.md:
+   "depth comes from card-on-card layering, never decorative shadows" — so the
+   shadow tier is NOT used here either. Card B reads as the top card because
+   its hairline crosses card A's canvas field.
+   ========================================================================== */
+
+.hero-visual {
+  position: relative;
+  padding-bottom: var(--space-xxl);
+}
+
+.mock-card-a,
+.mock-card-b {
+  background: var(--color-canvas);
+  border-radius: var(--rounded-xl);
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity .6s var(--ease), transform .6s var(--ease);
+}
+.hero-visual.in .mock-card-a { opacity: 1; transform: none; }
+.hero-visual.in .mock-card-b { opacity: 1; transform: none; transition-delay: 90ms; }
+
+.mock-card-a {
+  width: 100%;
+  padding: var(--space-xl);
+  border: 1px solid var(--color-hairline);
+}
+
+.mock-card-b {
+  position: absolute;
+  left: -24px;
+  bottom: -40px;
+  width: 260px;
+  z-index: 2;
+  padding: var(--space-lg);
+  border: 1px solid var(--color-hairline);
+}
+
+.mock-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: var(--space-lg);
+}
+.mock-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--rounded-full);
+  background: var(--color-muted);
+  flex: 0 0 auto;
+}
+/* caption-strong's 12px is the floor of the DESIGN.md scale — nothing on the
+   page sits below it. Tracking is 0: the system puts negative tracking on
+   display only and never positive tracking anywhere. Mono's own advance width
+   already opens PIPELINE / SOURCES up. */
+.mock-label {
+  font-family: var(--font-mono);
+  font-size: var(--type-caption-strong-size);
+  font-weight: var(--type-number-display-weight);
+  line-height: 1.4;
+  letter-spacing: var(--type-caption-strong-letter-spacing);
+  color: var(--color-body);
+}
+.mock-chip {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding-inline: var(--space-xs);
+  border-radius: var(--rounded-pill);
+  background: var(--color-surface-strong);
+  font-family: var(--font-mono);
+  font-size: var(--type-caption-strong-size);
+  font-weight: var(--type-number-display-weight);
+  line-height: 1;
+  color: var(--color-body);
+}
+
+/* JS owns the backing store and the CSS height; the ratio holds the box
+   before the first draw so nothing shifts. */
+#schematic-canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 520 / 240;
+}
+
+.mock-src-list {
+  list-style: none;
+  margin-top: var(--space-base);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+.mock-src-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.mock-src-plate {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--rounded-full);
+  background: var(--color-surface-strong);
+}
+/* ink at 40% over the #eef0f3 plate lands ≈ #a5a6a8 — the same visual weight
+   the white-at-40% dot carried on the dark card. */
+.mock-src-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--rounded-full);
+  background: var(--color-ink);
+  opacity: .4;
+}
+.mock-src-label {
+  font-family: var(--font-body);
+  font-size: var(--type-caption-size);
+  font-weight: var(--type-caption-weight);
+  line-height: var(--type-caption-line-height);
+  letter-spacing: var(--type-caption-letter-spacing);
+  color: var(--color-ink);
+}
+
+
+/* ==========================================================================
+   12. FEATURE CARDS — feature-card + badge-pill
+   These cards link nowhere. No hover state, no cursor change.
+   ========================================================================== */
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+  align-items: stretch;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--rounded-xl);
+  padding: var(--space-xl);
+}
+
+.card-icon {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--rounded-full);
+  background: var(--color-surface-strong);
+  color: var(--color-ink);
+  margin-bottom: var(--space-lg);
+}
+.card-icon svg { width: 20px; height: 20px; }
+
+.card-title {
+  font-family: var(--font-body);
+  font-size: var(--type-title-md-size);
+  font-weight: var(--type-title-md-weight);
+  line-height: var(--type-title-md-line-height);
+  color: var(--color-ink);
+  margin-bottom: var(--space-sm);
+}
+
+.card-body {
+  font-family: var(--font-body);
+  font-size: var(--type-body-md-size);
+  font-weight: var(--type-body-md-weight);
+  line-height: var(--type-body-md-line-height);
+  color: var(--color-body);
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-top: auto;
+  padding-top: var(--space-lg);
+}
+
+/* badge-pill — two homes only: .tag and .case-tag */
+.badge-pill,
+.tag,
+.case-tag {
+  display: inline-flex;
+  align-items: center;
+  background: var(--color-surface-strong);
+  color: var(--color-ink);
+  border-radius: var(--rounded-pill);
+  padding: var(--space-xxs) var(--space-sm);
+  font-family: var(--font-body);
+  font-size: var(--type-caption-strong-size);
+  font-weight: var(--type-caption-strong-weight);
+  line-height: var(--type-caption-strong-line-height);
+  letter-spacing: var(--type-caption-strong-letter-spacing);
+}
+
+
+/* ==========================================================================
+   13. PROCESS — how we work
+   ========================================================================== */
+
+.process-layout {
+  display: grid;
+  grid-template-columns: 440px 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.process-head { position: sticky; top: 120px; }
+.process-head .eyebrow { margin-bottom: var(--space-lg); }
+.process-head .section-headline { margin-bottom: var(--space-lg); }
+.process-head .section-sub { max-width: 400px; }
+
+.process-steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-base);
+}
+
+/* The base is the LIGHT-BAND variant — white on #f7f7f7, the system's own
+   elevation mechanic, no border and no shadow, doing the work no shadow is
+   allowed to do. It is kept so the component stays band-agnostic, but on this
+   site it never actually paints: every .process-step ships inside
+   #how-we-work's .band-dark, where the override at the end of this section
+   swaps the elevation step to #0a0b0d -> #16181c. Same mechanic — still no
+   border, still no shadow — inverted surface. */
+.process-step {
+  background: var(--color-surface-card);
+  border-radius: var(--rounded-xl);
+  padding: var(--space-xl);
+}
+
+/* #7c828a at 32px clears the 3:1 large-text threshold. Since #how-we-work went
+   dark this only ever renders on the step card's #16181c, where it is 4.59:1
+   and clears AA outright. No .band-dark override needed — see §"the band on
+   #0a0b0d" below, which deliberately leaves .step-num alone so the blue
+   .active-step walk stays the band's one accent moment. */
+.step-num {
+  font-family: var(--font-mono);
+  font-size: var(--type-number-lg-size);
+  font-weight: var(--type-number-lg-weight);
+  line-height: var(--type-number-lg-line-height);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-muted);
+  transition: color .4s var(--ease);
+}
+
+.step-rule {
+  position: relative;
+  height: 1px;
+  background: var(--color-hairline);
+  margin: var(--space-base) 0 var(--space-md);
+}
+.step-rule::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .4s var(--ease);
+}
+
+/* The band's one blue moment. It walks 01 → 04 as you read. */
+.process-step.active-step .step-num { color: var(--color-primary); }
+.process-step.active-step .step-rule::after { transform: scaleX(1); }
+
+.step-title {
+  font-family: var(--font-body);
+  font-size: var(--type-title-md-size);
+  font-weight: var(--type-title-md-weight);
+  line-height: var(--type-title-md-line-height);
+  color: var(--color-ink);
+  margin-bottom: var(--space-sm);
+}
+
+.step-body {
+  font-family: var(--font-body);
+  font-size: var(--type-body-md-size);
+  font-weight: var(--type-body-md-weight);
+  line-height: var(--type-body-md-line-height);
+  color: var(--color-body);
+}
+
+/* ---- the band on #0a0b0d: four product-ui-card-dark step cards -----------
+   The #0a0b0d → #16181c elevation step, relocated here from the hero mockups
+   when the hero went light. No border, no shadow — same mechanic, inverted
+   surface. The eyebrow / headline / sub already have .band-dark rules in §9. */
+.band-dark .process-step { background: var(--color-surface-dark-elevated); }
+.band-dark .step-rule    { background: var(--on-dark-rule); }
+.band-dark .step-title   { color: var(--color-on-dark); }
+.band-dark .step-body    { color: var(--color-on-dark-soft); }
+
+
+/* ==========================================================================
+   14. CASE CARD — product-ui-card-light
+   ========================================================================== */
+
+.case-cards { display: grid; gap: var(--space-lg); }
+
+.case-card {
+  position: relative;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--rounded-xl);
+  padding: var(--space-xxl);
+  transition: opacity var(--dur-reveal) var(--ease),
+              transform var(--dur-reveal) var(--ease),
+              border-color var(--dur-state) linear,
+              box-shadow var(--dur-state) linear;
+}
+
+/* The one element on the page that lifts, and the only use of the
+   single permitted shadow tier. */
+.case-card.in:hover {
+  border-color: var(--color-muted-soft);
+  box-shadow: var(--shadow);
+  transform: translateY(-4px);
+}
+
+.case-card:focus-within {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 3px;
+  border-radius: var(--rounded-xl);
+}
+
+.case-inner {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: var(--space-xxl);
+  align-items: center;
+}
+
+/* The .case-arrow plate is absolutely positioned in the card's top-right and
+   occupies the last 40px of the content box. Capping the tag keeps the pill
+   from sliding under the plate on narrow viewports — at 320px the pill wraps
+   to two lines instead of colliding. No effect at desktop widths. */
+.case-tag {
+  margin-bottom: var(--space-md);
+  max-width: calc(100% - 52px);
+}
+
+.case-title {
+  font-family: var(--font-display);
+  font-size: var(--type-display-sm-size);
+  font-weight: var(--type-display-sm-weight);
+  line-height: var(--type-display-sm-line-height);
+  letter-spacing: var(--type-display-sm-letter-spacing);
+  color: var(--color-ink);
+  margin-bottom: var(--space-xl);
+}
+/* Real link, stretched over the card. Accessible name stays the title. */
+.case-title a { color: inherit; text-decoration: none; }
+.case-title a::after { content: ''; position: absolute; inset: 0; z-index: 1; }
+.case-title a:focus-visible { outline: none; }
+
+.case-block + .case-block { margin-top: var(--space-lg); }
+
+.case-block-label {
+  font-family: var(--font-body);
+  font-size: var(--type-title-sm-size);
+  font-weight: var(--type-title-sm-weight);
+  line-height: var(--type-title-sm-line-height);
+  color: var(--color-ink);
+  margin-bottom: var(--space-xs);
+}
+
+.case-block-text {
+  font-family: var(--font-body);
+  font-size: var(--type-body-md-size);
+  font-weight: var(--type-body-md-weight);
+  line-height: var(--type-body-md-line-height);
+  color: var(--color-body);
+}
+
+.case-rule {
+  height: 1px;
+  background: var(--color-hairline);
+  border: 0;
+  margin: var(--space-xl) 0 var(--space-lg);
+}
+
+.case-impact-row { display: flex; gap: var(--space-xxl); }
+
+/* --type-number-lg. Numbers are not actions — these stay ink, never blue. */
+.metric-val {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--type-number-lg-size);
+  font-weight: var(--type-number-lg-weight);
+  line-height: var(--type-number-lg-line-height);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink);
+}
+.metric-label {
+  display: block;
+  margin-top: var(--space-xs);
+  max-width: 28ch;
+  font-family: var(--font-body);
+  font-size: var(--type-body-sm-size);
+  font-weight: var(--type-body-sm-weight);
+  line-height: var(--type-body-sm-line-height);
+  color: var(--color-body);
+}
+
+/* The card's only affordance. It has to paint ABOVE the stretched link
+   (.case-title a::after, z-index 1) to stay visible, which would otherwise
+   make it the one dead 40px click zone on the card. It is decorative — an
+   aria-hidden glyph — so it gives its hits back to the link underneath.
+   Its hover/focus styling is driven from the card, not from itself. */
+.case-arrow {
+  position: absolute;
+  top: var(--space-xxl);
+  right: var(--space-xxl);
+  z-index: 2;
+  pointer-events: none;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--rounded-full);
+  background: var(--color-surface-strong);
+  color: var(--color-primary);
+  transition: background-color var(--dur-state) linear, color var(--dur-state) linear;
+}
+.case-arrow svg { width: 18px; height: 18px; }
+.case-card.in:hover .case-arrow,
+.case-card:focus-within .case-arrow {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.case-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: var(--space-lg);
+}
+.case-diagram { width: 100%; max-width: 360px; height: auto; }
+
+
+/* ==========================================================================
+   15. ABOUT
+   ========================================================================== */
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  gap: 64px;
+  align-items: start;
+}
+
+.about-left { position: sticky; top: var(--space-section); }
+.about-left .eyebrow { margin-bottom: var(--space-lg); }
+
+.about-right { max-width: 62ch; }
+.about-right p {
+  font-family: var(--font-body);
+  font-size: var(--type-body-md-size);
+  font-weight: var(--type-body-md-weight);
+  line-height: var(--type-body-md-line-height);
+  color: var(--color-body);
+}
+.about-right p + p { margin-top: var(--space-md); }
+
+.about-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+  margin-top: 64px;
+  padding-top: var(--space-xxl);
+  border-top: 1px solid var(--color-hairline);
+}
+.about-stat + .about-stat {
+  border-left: 1px solid var(--color-hairline);
+  padding-left: var(--space-xl);
+}
+
+/* Small display statements, which is what they are. */
+.about-stat-num {
+  font-family: var(--font-display);
+  font-size: var(--type-title-lg-size);
+  font-weight: var(--type-title-lg-weight);
+  line-height: var(--type-title-lg-line-height);
+  letter-spacing: var(--type-title-lg-letter-spacing);
+  color: var(--color-ink);
+}
+.about-stat-label {
+  margin-top: var(--space-xs);
+  max-width: 34ch;
+  font-family: var(--font-body);
+  font-size: var(--type-body-sm-size);
+  font-weight: var(--type-body-sm-weight);
+  line-height: var(--type-body-sm-line-height);
+  color: var(--color-body);
+}
+
+
+/* ==========================================================================
+   16. CONTACT — cta-band-dark
+   ========================================================================== */
+
+.contact-head {
+  max-width: 800px;
+  margin-inline: auto;
+  text-align: center;
+  margin-bottom: 64px;
+}
+.contact-head .eyebrow { margin-bottom: var(--space-lg); }
+.contact-head .section-headline {
+  max-width: 20ch;
+  margin-inline: auto;
+  margin-bottom: var(--space-lg);
+}
+.contact-head .section-sub {
+  max-width: 58ch;
+  margin-inline: auto;
+  font-size: var(--type-hero-lede-size);
+  line-height: var(--type-hero-lede-line-height);
+}
+
+/* The only place on the page where blue underlines a word: one deliberate
+   gesture at the moment of the ask. The word itself stays white. */
+#contact .accent-word {
+  display: inline-block;
+  padding-bottom: 10px;
+  color: var(--color-on-dark);
+  box-shadow: inset 0 -3px 0 var(--color-primary);
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xxl);
+  max-width: 960px;
+  margin-inline: auto;
+}
+
+/* product-ui-card-dark: the #0a0b0d → #16181c step is the whole depth
+   mechanic. No border, no shadow. */
+.contact-panel {
+  background: var(--color-surface-dark-elevated);
+  border-radius: var(--rounded-xl);
+  padding: var(--space-xl);
+}
+
+.contact-what-label {
+  font-family: var(--font-body);
+  font-size: var(--type-title-sm-size);
+  font-weight: var(--type-title-sm-weight);
+  line-height: var(--type-title-sm-line-height);
+  color: var(--color-on-dark);
+  margin-bottom: var(--space-sm);
+}
+.contact-what-text {
+  font-family: var(--font-body);
+  font-size: var(--type-body-md-size);
+  font-weight: var(--type-body-md-weight);
+  line-height: var(--type-body-md-line-height);
+  color: var(--color-on-dark-soft);
+}
+
+.booking-cta-wrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.booking-btn { width: 100%; }
+.booking-btn-label { display: inline-block; }
+
+.booking-meta {
+  list-style: none;
+  margin-top: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+.booking-meta-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-height: var(--btn-height);
+}
+.booking-meta-plate {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--rounded-full);
+  background: var(--on-dark-fill);
+  color: var(--color-on-dark-soft);
+}
+.booking-meta-plate svg { width: 16px; height: 16px; }
+.booking-meta-label {
+  font-family: var(--font-body);
+  font-size: var(--type-body-sm-size);
+  font-weight: var(--type-body-sm-weight);
+  line-height: var(--type-body-sm-line-height);
+  color: var(--color-on-dark-soft);
+}
+
+
+/* ==========================================================================
+   17. FOOTER — footer-light + legal-band
+   ========================================================================== */
+
+.site-footer {
+  background: var(--color-canvas);
+  border-top: 1px solid var(--color-hairline);
+  padding: 64px 0 var(--space-xxl);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  gap: var(--space-xxl);
+}
+
+.footer-wordmark {
+  font-family: var(--font-body);
+  font-size: var(--type-title-md-size);
+  font-weight: var(--type-title-md-weight);
+  line-height: var(--type-title-md-line-height);
+  color: var(--color-ink);
+}
+.footer-tagline,
+.footer-loc {
+  margin-top: var(--space-xs);
+  font-family: var(--font-body);
+  font-size: var(--type-body-sm-size);
+  font-weight: var(--type-body-sm-weight);
+  line-height: var(--type-body-sm-line-height);
+  color: var(--color-body);
+}
+
+.footer-col-label {
+  font-family: var(--font-body);
+  font-size: var(--type-caption-strong-size);
+  font-weight: var(--type-caption-strong-weight);
+  line-height: var(--type-caption-strong-line-height);
+  letter-spacing: var(--type-caption-strong-letter-spacing);
+  color: var(--color-body);
+  margin-bottom: var(--space-md);
+}
+
+.footer-links { list-style: none; }
+.footer-links a {
+  display: block;
+  padding: var(--space-sm) 0;
+  font-family: var(--font-body);
+  font-size: var(--type-body-sm-size);
+  font-weight: var(--type-body-sm-weight);
+  line-height: var(--type-body-sm-line-height);
+  color: var(--color-body);
+  text-decoration: none;
+  border-radius: var(--rounded-xs);
+  transition: color var(--dur-swap) linear;
+}
+.footer-links a:hover {
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.footer-cta .btn-primary { width: fit-content; }
+
+.footer-legal {
+  margin-top: var(--space-xxl);
+  padding-block: var(--space-lg);
+  border-top: 1px solid var(--color-hairline);
+}
+.footer-copy {
+  font-family: var(--font-body);
+  font-size: var(--type-caption-size);
+  font-weight: var(--type-caption-weight);
+  line-height: var(--type-caption-line-height);
+  color: var(--color-body); /* documented divergence from legal-band's {colors.muted} */
+}
+
+
+/* ==========================================================================
+   18. CASE-STUDY PAGES
+   The case-study hero is hero-band-light, not a second dark hero.
+   ========================================================================== */
+
+.cs-hero {
+  background: var(--color-canvas);
+  padding: 160px 0 64px;
+}
+.cs-tag {
+  font-family: var(--font-body);
+  font-size: var(--type-caption-strong-size);
+  font-weight: var(--type-caption-strong-weight);
+  line-height: var(--type-caption-strong-line-height);
+  letter-spacing: var(--type-caption-strong-letter-spacing);
+  color: var(--color-body);
+  margin-bottom: var(--space-lg);
+}
+.cs-title {
+  font-family: var(--font-display);
+  font-size: var(--type-display-xl-size);
+  font-weight: var(--type-display-xl-weight);
+  line-height: var(--type-display-xl-line-height);
+  letter-spacing: var(--type-display-xl-letter-spacing);
+  color: var(--color-ink);
+  margin-bottom: var(--space-lg);
+  text-wrap: pretty;
+}
+.cs-subtitle {
+  font-family: var(--font-body);
+  font-size: var(--type-hero-lede-size);
+  font-weight: var(--type-hero-lede-weight);
+  line-height: var(--type-hero-lede-line-height);
+  color: var(--color-body);
+  max-width: 56ch;
+}
+
+/* ---- metrics bar -------------------------------------------------------- */
+.metrics-bar {
+  background: var(--color-surface-soft);
+  padding-block: var(--space-xxl);
+}
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-xxl);
+}
+.metric-item + .metric-item {
+  border-left: 1px solid var(--color-hairline);
+  padding-left: var(--space-xxl);
+}
+.metric-number {
+  font-family: var(--font-mono);
+  font-size: var(--type-number-lg-size);
+  font-weight: var(--type-number-lg-weight);
+  line-height: var(--type-number-lg-line-height);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink);
+  margin-bottom: var(--space-sm);
+}
+.metric-desc {
+  font-family: var(--font-body);
+  font-size: var(--type-body-sm-size);
+  font-weight: var(--type-body-sm-weight);
+  line-height: var(--type-body-sm-line-height);
+  color: var(--color-body);
+}
+
+/* ---- body --------------------------------------------------------------- */
+.cs-body {
+  background: var(--color-canvas);
+  padding-block: var(--space-section);
+}
+.cs-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 64px;
+  align-items: start;
+}
+.cs-block + .cs-block { margin-top: var(--space-xxl); }
+
+.block-label {
+  font-family: var(--font-body);
+  font-size: var(--type-title-sm-size);
+  font-weight: var(--type-title-sm-weight);
+  line-height: var(--type-title-sm-line-height);
+  color: var(--color-ink);
+  margin-bottom: var(--space-base);
+}
+.block-title {
+  font-family: var(--font-display);
+  font-size: var(--type-title-lg-size);
+  font-weight: var(--type-title-lg-weight);
+  line-height: var(--type-title-lg-line-height);
+  letter-spacing: var(--type-title-lg-letter-spacing);
+  color: var(--color-ink);
+  margin-bottom: var(--space-base);
+}
+.block-text {
+  font-family: var(--font-body);
+  font-size: var(--type-body-md-size);
+  font-weight: var(--type-body-md-weight);
+  line-height: var(--type-body-md-line-height);
+  color: var(--color-body);
+  max-width: 68ch;
+}
+.block-text + .block-text { margin-top: var(--space-base); }
+
+/* ---- tech list — the asset-row component -------------------------------- */
+.tech-list { list-style: none; }
+.tech-item {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: var(--space-lg);
+  padding: var(--space-base) 0;
+  border-bottom: 1px solid var(--color-hairline-soft);
+}
+.tech-item:last-child { border-bottom: 0; }
+.tech-name {
+  font-family: var(--font-body);
+  font-size: var(--type-title-sm-size);
+  font-weight: var(--type-title-sm-weight);
+  line-height: var(--type-title-sm-line-height);
+  color: var(--color-ink);
+}
+.tech-role {
+  font-family: var(--font-body);
+  font-size: var(--type-body-md-size);
+  font-weight: var(--type-body-md-weight);
+  line-height: var(--type-body-md-line-height);
+  color: var(--color-body);
+}
+/* template.html keeps its authored flex row rather than the 180px grid. */
+.tech-list--flex .tech-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-lg);
+}
+
+/* ---- pull quote — the page's one blue moment in the body ---------------- */
+.pull-quote {
+  background: var(--color-surface-soft);
+  border-left: 3px solid var(--color-primary);
+  border-radius: var(--rounded-xl);
+  padding: var(--space-xl) var(--space-xl) var(--space-xl) 29px;
+}
+.pull-quote p {
+  font-family: var(--font-display);
+  font-size: var(--type-title-lg-size);
+  font-weight: var(--type-title-lg-weight);
+  line-height: var(--type-title-lg-line-height);
+  letter-spacing: var(--type-title-lg-letter-spacing);
+  color: var(--color-ink);
+}
+
+/* ---- sidebar ------------------------------------------------------------ */
+.cs-sidebar {
+  position: sticky;
+  top: var(--scroll-offset);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-base);
+}
+.sidebar-card {
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--rounded-xl);
+  padding: var(--space-lg);
+}
+.sidebar-card-label {
+  font-family: var(--font-body);
+  font-size: var(--type-caption-strong-size);
+  font-weight: var(--type-caption-strong-weight);
+  line-height: var(--type-caption-strong-line-height);
+  letter-spacing: var(--type-caption-strong-letter-spacing);
+  color: var(--color-body);
+  margin-bottom: var(--space-sm);
+}
+.sidebar-value {
+  font-family: var(--font-body);
+  font-size: var(--type-title-sm-size);
+  font-weight: var(--type-title-sm-weight);
+  line-height: var(--type-title-sm-line-height);
+  color: var(--color-ink);
+}
+.sidebar-desc,
+.sidebar-stat-label {
+  margin-top: var(--space-xs);
+  font-family: var(--font-body);
+  font-size: var(--type-body-sm-size);
+  font-weight: var(--type-body-sm-weight);
+  line-height: var(--type-body-sm-line-height);
+  color: var(--color-body);
+}
+.sidebar-stat {
+  font-family: var(--font-mono);
+  font-size: var(--type-number-lg-size);
+  font-weight: var(--type-number-lg-weight);
+  line-height: var(--type-number-lg-line-height);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink);
+}
+.sidebar-list { list-style: none; }
+.sidebar-list li {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--color-hairline-soft);
+  font-family: var(--font-body);
+  font-size: var(--type-body-sm-size);
+  font-weight: var(--type-body-sm-weight);
+  line-height: var(--type-body-sm-line-height);
+  color: var(--color-body);
+}
+.sidebar-list li:last-child { border-bottom: 0; padding-bottom: 0; }
+
+/* ---- next-case block (template.html only) ------------------------------- */
+.cs-next {
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--rounded-xl);
+  padding: var(--space-xl);
+  margin-top: var(--space-section);
+}
+.cs-next-label {
+  font-family: var(--font-body);
+  font-size: var(--type-caption-strong-size);
+  font-weight: var(--type-caption-strong-weight);
+  line-height: var(--type-caption-strong-line-height);
+  color: var(--color-body);
+  margin-bottom: var(--space-sm);
+}
+.cs-next-title {
+  font-family: var(--font-display);
+  font-size: var(--type-title-lg-size);
+  font-weight: var(--type-title-lg-weight);
+  line-height: var(--type-title-lg-line-height);
+  letter-spacing: var(--type-title-lg-letter-spacing);
+  color: var(--color-ink);
+  margin-bottom: var(--space-base);
+}
+.cs-next-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--btn-height);
+  color: var(--color-primary);
+  text-decoration: none;
+  font-family: var(--font-body);
+  font-size: var(--type-button-size);
+  font-weight: var(--type-button-weight);
+  line-height: var(--type-button-line-height);
+  border-radius: var(--rounded-xs);
+}
+.cs-next-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+/* ---- case-study footer -------------------------------------------------- */
+.cs-footer {
+  background: var(--color-canvas);
+  border-top: 1px solid var(--color-hairline);
+  padding-block: var(--space-xl);
+}
+.cs-footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  flex-wrap: wrap;
+}
+.cs-footer-copy {
+  font-family: var(--font-body);
+  font-size: var(--type-caption-size);
+  font-weight: var(--type-caption-weight);
+  line-height: var(--type-caption-line-height);
+  color: var(--color-body);
+}
+.cs-footer-back {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--btn-height);
+  font-family: var(--font-body);
+  font-size: var(--type-body-sm-size);
+  font-weight: var(--type-body-sm-weight);
+  line-height: var(--type-body-sm-line-height);
+  color: var(--color-body);
+  text-decoration: none;
+  border-radius: var(--rounded-xs);
+  transition: color var(--dur-swap) linear;
+}
+.cs-footer-back:hover { color: var(--color-ink); }
+
+
+/* ==========================================================================
+   19. RESPONSIVE
+   Four DESIGN.md breakpoints (1280 / 1024 / 640 wide-desktop-tablet-mobile)
+   plus the documented 900px nav collapse and the exact h1 ladder steps.
+   ========================================================================== */
+
+/* ---- Wide > 1280px: content caps at 1200px; nothing else changes -------- */
+
+/* ---- Short desktop viewports -------------------------------------------
+   The hero content stack measures ~926px at the desktop step, so on a
+   1280x720 or 1366x768 laptop the CTA row — the band's single blue moment —
+   falls below the fold. Recover it with the next rung of the documented h1
+   ladder (80 -> 64) and a shorter top inset. Height-only, so nothing
+   changes on a normal-height desktop.
+   The 860px cut is measured, not guessed: at the desktop step the CTA row's
+   bottom edge lands at y=830, so every viewport above ~860 already clears it
+   with room to spare. */
+@media (min-width: 1025px) and (max-height: 860px) {
+  .hero { padding-top: 120px; }
+  .hero-headline { font-size: var(--type-display-xl-size); }
+  .status-line { margin-bottom: var(--space-lg); }
+}
+
+/* ---- Desktop / Tablet boundary: 1024px --------------------------------- */
+@media (max-width: 1280px) {
+  .process-layout { grid-template-columns: 380px 1fr; gap: 64px; }
+}
+
+@media (max-width: 1024px) {
+  /* h1 ladder step 2 */
+  .hero-headline { font-size: var(--type-display-xl-size); }
+  .section-headline { font-size: var(--type-display-md-size); }
+  .cs-title { font-size: var(--type-display-lg-size); }
+
+  /* split heads collapse */
+  .section-head {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+    align-items: start;
+    margin-bottom: var(--space-xxl);
+  }
+
+  /* hero → one column; the mockup stack drops below the CTAs */
+  .hero {
+    min-height: 0;
+    display: block;
+    padding: 140px 0 var(--space-section);
+  }
+  .hero-grid { grid-template-columns: 1fr; gap: var(--space-xxl); }
+  .hero-copy { max-width: none; }
+
+  /* Single column, so .hero-visual now starts at the container edge and the
+     desktop left:-24px (which hangs the card into the column gutter) would
+     glue it to x=0. Re-anchor it inside: it still overlaps card A's lower
+     left, but with a gutter. Only 901-1024px sees this — below 901 the card
+     is display:none. */
+  .mock-card-b { left: var(--space-xl); }
+
+  .cards-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* sticky must be explicitly cancelled here */
+  .process-layout { grid-template-columns: 1fr; gap: var(--space-xxl); }
+  .process-head { position: static; top: auto; }
+  .process-head .section-sub { max-width: 46ch; }
+
+  .about-grid { grid-template-columns: 1fr; gap: 40px; }
+  .about-left { position: static; top: auto; }
+
+  .case-card { padding: var(--space-xl); }
+  .case-inner { grid-template-columns: 1fr; gap: var(--space-xl); }
+  .case-right { order: 2; padding-top: 0; }
+  .case-arrow { top: var(--space-xl); right: var(--space-xl); }
+
+  .contact-grid { grid-template-columns: 1fr; gap: var(--space-lg); }
+
+  .cs-layout { grid-template-columns: 1fr; gap: var(--space-xxl); }
+  .cs-sidebar { position: static; top: auto; }
+
+  .footer-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-xl); }
+}
+
+/* ---- 900px: nav collapses; layered cards collapse to a single card ------
+   DESIGN.md's Collapsing Strategy: "Top nav switches to hamburger sheet …
+   Sign Up CTA stays visible." So only the link list goes here — the booking
+   CTA survives the whole tablet range beside the hamburger. It steps out at
+   560px (below), where the sheet's own full-width CTA takes over. */
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  .nav-toggle { display: inline-flex; }
+
+  .mock-card-b { display: none; }
+  .hero-visual { padding-bottom: 0; }
+}
+
+/* ---- 768px: h1 ladder step 3 ------------------------------------------- */
+@media (max-width: 768px) {
+  .hero-headline { font-size: var(--type-display-lg-size); }
+  .section-headline { font-size: var(--type-display-sm-size); }
+  .cs-title { font-size: var(--type-display-md-size); }
+  .case-title { font-size: var(--type-title-lg-size); }
+}
+
+/* ---- Mobile < 640px ----------------------------------------------------- */
+@media (max-width: 640px) {
+  :root {
+    --container-pad: 20px;
+    --space-section: 64px;
+  }
+
+  .hero-headline { font-size: var(--type-display-md-size); max-width: none; }
+  .section-headline { font-size: var(--type-title-lg-size); }
+  .cs-title { font-size: var(--type-display-sm-size); }
+
+  .hero { padding: 120px 0 var(--space-section); }
+
+  .cards-grid { grid-template-columns: 1fr; }
+  .card { padding: var(--space-lg); }
+
+  .process-step { padding: var(--space-lg); }
+
+  .case-card { padding: var(--space-lg); }
+  .case-arrow { top: var(--space-lg); right: var(--space-lg); }
+  .case-impact-row { flex-direction: column; gap: var(--space-lg); }
+
+  .about-stats { grid-template-columns: 1fr; gap: 0; }
+  .about-stat + .about-stat {
+    border-left: 0;
+    padding-left: 0;
+    margin-top: var(--space-lg);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--color-hairline);
+  }
+
+  .contact-panel { padding: var(--space-lg); }
+
+  .metrics-grid { grid-template-columns: 1fr; gap: 0; }
+  .metric-item + .metric-item {
+    border-left: 0;
+    padding-left: 0;
+    margin-top: var(--space-lg);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--color-hairline);
+  }
+
+  .tech-item { grid-template-columns: 1fr; gap: var(--space-xxs); }
+  .tech-list--flex .tech-item { flex-direction: column; align-items: flex-start; }
+
+  .pull-quote { padding: var(--space-lg) var(--space-lg) var(--space-lg) 21px; }
+  .pull-quote p { font-size: var(--type-title-md-size); font-weight: 400; letter-spacing: 0; }
+
+  .cs-hero { padding: 120px 0 var(--space-xxl); }
+  .cs-next { padding: var(--space-lg); }
+  .sidebar-card { padding: var(--space-lg); }
+
+  /* the wordmark steps out; the back link and the CTA keep full 44px targets */
+  .cs-nav .nav-logo { display: none; }
+}
+
+/* ---- 560px: the nav CTA finally steps out -------------------------------
+   Measured chrome with the links already hidden: logo 143 + CTA 148 +
+   toggle 44 + two 24px .nav-inner gaps = 383px, which still clears a 560px
+   viewport's 512px of content but not a 390px phone's 350px. Below this the
+   sheet's own full-width CTA is the booking affordance. */
+@media (max-width: 560px) {
+  .site-nav .nav-cta { display: none; }
+}
+
+/* ---- 520px: footer to one column --------------------------------------- */
+@media (max-width: 520px) {
+  .footer-grid { grid-template-columns: 1fr; gap: var(--space-xl); }
+}
+
+/* ---- 480px: both hero CTAs go full width -------------------------------- */
+@media (max-width: 480px) {
+  .hero-ctas { flex-direction: column; align-items: stretch; }
+  .hero-ctas .btn-primary,
+  .hero-ctas .btn-secondary-light { width: 100%; }
+}
+
+/* ---- 400px: h1 ladder step 4 (final) ------------------------------------ */
+@media (max-width: 400px) {
+  .hero-headline { font-size: var(--type-display-sm-size); }
+  /* .status-text-wrap keeps its 172px min-width at every breakpoint. The
+     phrases are absolutely positioned, so they contribute nothing to the
+     wrap's width and min-width is the ONLY thing holding the box open.
+     The longest phrases ("Document extraction", "Workflow automation") are
+     19 monospace characters = ~160px at 14px JetBrains Mono; anything under
+     that clips the copy. The chip is 240px wide in total, which still fits
+     a 320px viewport. Do not shrink this. */
+}
+
+
+/* ==========================================================================
+   20. REDUCED MOTION
+   A complete, correct, fully visible page — not a broken one.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .word, .in, .eyebrow, .hero-sub, .hero-ctas, .status-line, .hero-visual,
+  .card, .case-card, .process-step, .scroll-fade, .section-sub,
+  .section-headline, .mock-card-a, .mock-card-b, .cs-block, .sidebar-card,
+  .cs-reveal, .site-nav {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .status-phrase.active { opacity: 1 !important; }
+  .status-cursor { animation: none !important; opacity: 1 !important; }
+  #hairline { display: none !important; }
+}

@@ -1,0 +1,12 @@
+# Files kept in the repo but never published to the live site.
+
+# Design-system reference used to build the site. Not site content.
+DESIGN.md
+
+# Orphaned working screenshots pasted during authoring.
+# Referenced by no page; excluded so they are not publicly served.
+uploads/
+
+# Local notes and scratch files, if any are ever added.
+*.md
+!case-studies/case-study-template.md

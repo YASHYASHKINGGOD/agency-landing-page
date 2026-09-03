@@ -1,926 +1,1053 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Custom AI — Bespoke AI for Industry</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
-<link rel="icon" type="image/svg+xml" href="logo.svg">
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#F8F6FF;--bg-elev:#EFE9FF;--fg:#18102E;--fg-muted:#6E6490;
-  --border:#DDD6F5;--accent:#6C3FC2;--accent-fg:#FFFFFF;
-  --serif:'Lora',Georgia,serif;--sans:'Plus Jakarta Sans',sans-serif;
-}
-html{scroll-behavior:smooth;font-size:16px}
-body{background:var(--bg);color:var(--fg);font-family:var(--sans);line-height:1.55;overflow-x:hidden}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom AI — Bespoke AI for Industry</title>
 
-/* NAV */
-#nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px max(48px, calc((100vw - 1200px) / 2));display:flex;align-items:center;justify-content:space-between;transition:background .4s,border-color .4s;border-bottom:1px solid transparent;opacity:0;transform:translateY(-4px)}
-#nav.loaded{opacity:1;transform:translateY(0);transition:opacity .5s .4s,transform .5s .4s,background .4s,border-color .4s}
-#nav.scrolled{background:rgba(248,246,255,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-color:var(--border)}
-.nav-logo{font-family:var(--sans);font-weight:600;font-size:17px;letter-spacing:-.01em;color:var(--fg);text-decoration:none;display:flex;align-items:center;gap:10px}
-.nav-logo img{width:28px;height:28px;border-radius:6px;display:block}
-.nav-links{display:flex;gap:32px;list-style:none}
-.nav-links a{color:#7B5CB8;text-decoration:none;font-size:13px;transition:color .2s;position:relative}
-.nav-links a::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1px;background:var(--accent);transition:width .2s}
-.nav-links a:hover{color:var(--fg)}
-.nav-links a:hover::after{width:100%}
-.btn-primary{background:var(--accent);color:var(--accent-fg);border:none;padding:10px 22px;font-family:var(--sans);font-weight:600;font-size:14px;border-radius:2px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;text-decoration:none;transition:gap .2s,transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s;position:relative;overflow:hidden;isolation:isolate}
-.btn-primary::before{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.35) 50%,transparent 70%);transform:translateX(-150%);transition:none;z-index:1}
-.btn-primary::after{content:'';position:absolute;inset:0;background:var(--accent);border-radius:inherit;transform:scaleX(1) scaleY(1);transform-origin:center;transition:transform .4s cubic-bezier(.34,1.56,.64,1);z-index:-1}
-.btn-primary:hover{gap:14px;transform:translateY(-3px) scale(1.04);box-shadow:0 12px 32px rgba(108,63,194,.4),0 2px 8px rgba(108,63,194,.25)}
-.btn-primary:hover::before{transform:translateX(150%);transition:transform .55s ease-in-out}
-.btn-primary:hover::after{transform:scaleX(1.06) scaleY(1.15)}
-.btn-primary:active{transform:translateY(0) scale(.98);box-shadow:0 2px 8px rgba(108,63,194,.25);transition:transform .1s,box-shadow .1s}
-.btn-ghost{color:var(--fg-muted);text-decoration:none;font-size:15px;font-weight:400;display:inline-flex;align-items:center;gap:6px;position:relative;transition:color .2s}
-.btn-ghost::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1px;background:var(--fg);transition:width .2s}
-.btn-ghost:hover{color:var(--fg)}
-.btn-ghost:hover::after{width:100%}
+  <meta name="description" content="Custom AI is a bespoke AI engineering agency in Bengaluru. We build custom AI systems — document extraction, decision agents, workflow automation and internal copilots — that run in production inside operating businesses.">
 
-/* HAIRLINE */
-#hairline{position:fixed;top:50%;left:0;right:0;height:1px;background:var(--border);transform:scaleX(0);transform-origin:center;z-index:200;pointer-events:none;opacity:0}
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Custom AI — Bespoke AI for Industry">
+  <meta property="og:description" content="Custom AI is a bespoke AI engineering agency in Bengaluru. We build custom AI systems — document extraction, decision agents, workflow automation and internal copilots — that run in production inside operating businesses.">
+  <meta property="og:image" content="logo-mark.png">
 
-/* HERO */
-#hero{min-height:100vh;display:flex;align-items:center;padding:120px 48px 80px;position:relative}
-.hero-inner{max-width:1200px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
-.hero-content{display:flex;flex-direction:column;gap:0}
-.eyebrow{font-family:var(--sans);font-weight:500;font-size:11px;letter-spacing:.18em;color:var(--fg-muted);text-transform:uppercase;margin-bottom:24px;opacity:0;transform:translateX(-12px);transition:opacity .5s,transform .5s}
-.eyebrow.in{opacity:1;transform:translateX(0)}
-.hero-headline{font-family:var(--serif);font-style:normal;font-size:clamp(44px,6vw,96px);line-height:1.08;letter-spacing:-.02em;margin-bottom:32px;display:flex;flex-wrap:wrap;align-items:baseline;column-gap:.22em;row-gap:.08em}
-.hero-headline .word{display:inline-block;opacity:0;transform:translateY(20px);filter:blur(6px);transition:opacity .4s,transform .4s,filter .4s}
-.hero-headline .word.in{opacity:1;transform:translateY(0);filter:blur(0)}
-.hero-headline .accent-word{color:var(--accent)}
-.hero-sub{font-size:16px;color:var(--fg-muted);line-height:1.65;max-width:100%;margin-bottom:24px;opacity:0;transition:opacity .5s}
-.hero-sub.in{opacity:1}
-.status-line{display:flex;align-items:center;gap:8px;height:28px;margin-bottom:36px;overflow:hidden;position:relative;opacity:0;transition:opacity .5s}
-.status-line.in{opacity:1}
-.status-arrow{color:var(--fg-muted);font-size:15px;flex-shrink:0}
-.status-text-wrap{flex:1;overflow:hidden;height:28px;position:relative}
-.status-phrase{position:absolute;top:0;left:0;font-size:15px;color:var(--fg-muted);line-height:28px;white-space:nowrap;opacity:0;transform:translateY(16px);transition:opacity .3s,transform .3s}
-.status-phrase.active{opacity:1;transform:translateY(0)}
-.status-phrase.exit{opacity:0;transform:translateY(-16px)}
-.status-cursor{color:var(--accent);animation:blink 1s step-end infinite;margin-left:2px}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-.hero-ctas{display:flex;align-items:center;gap:20px;opacity:0;transform:translateY(12px);transition:opacity .4s,transform .4s}
-.hero-ctas.in{opacity:1;transform:translateY(0)}
+  <link rel="icon" type="image/png" href="logo-mark.png">
 
-/* HERO SVG ANIMATIONS */
-@keyframes flow-particle{0%{opacity:0;offset-distance:0%}10%{opacity:1}80%{opacity:1}100%{opacity:0;offset-distance:100%}}
-@keyframes node-breathe{0%,100%{opacity:.6}50%{opacity:1}}
-@keyframes model-pulse{0%,100%{box-shadow:none}50%{box-shadow:0 0 0 6px rgba(108,63,194,.1)}}
-@keyframes ping{0%{transform:scale(1);opacity:.8}100%{transform:scale(2.8);opacity:0}}
-.flow-dot{animation:flow-particle 2.4s ease-in-out infinite}
-.ping-ring{animation:ping 2s ease-out infinite}
-.hero-visual{display:flex;align-items:center;justify-content:center;opacity:0;transform:translateX(20px);transition:opacity .6s .4s,transform .6s .4s}
-.hero-visual.in{opacity:1;transform:translateX(0)}
-.hero-visual svg{width:100%;max-width:520px}
-.schematic-path{stroke-dasharray:var(--l,400);stroke-dashoffset:var(--l,400);animation:none}
-.schematic-path.draw{animation:draw-path 1.2s cubic-bezier(.65,0,.35,1) forwards}
-@keyframes draw-path{to{stroke-dashoffset:0}}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://unpkg.com/lucide@1.39.0/dist/umd/lucide.min.js" defer></script>
 
-
-
-/* SECTIONS */
-section{padding:120px 48px}
-.section-inner{max-width:1200px;margin:0 auto}
-.section-head{margin-bottom:72px}
-.section-head .eyebrow{margin-bottom:20px}
-.section-headline{font-family:var(--serif);font-style:normal;font-size:clamp(36px,5vw,72px);line-height:1.05;letter-spacing:-.02em;margin-bottom:20px}
-.section-headline .word{display:inline-block;margin-right:.15em;opacity:0;transform:translateY(20px);transition:opacity .4s,transform .4s}
-.section-headline .word.in{opacity:1;transform:translateY(0)}
-.section-sub{font-size:15px;color:var(--fg-muted);line-height:1.7;max-width:100%;opacity:0;transform:translateY(16px);transition:opacity .6s,transform .6s}
-.section-sub.in{opacity:1;transform:translateY(0)}
-
-/* WHAT WE DO — CARDS */
-.cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;background:transparent}
-.card{background:var(--bg-elev);padding:40px;border-radius:4px;position:relative;overflow:hidden;cursor:pointer;opacity:0;transform:translateY(24px) scale(.98);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1),box-shadow .3s}
-.card.in{opacity:1;transform:translateY(0) scale(1)}
-.card:hover{transform:translateY(-6px) scale(1)!important;box-shadow:0 20px 60px rgba(0,0,0,.5)}
-.card-svg-border{position:absolute;inset:0;pointer-events:none;overflow:visible}
-.card-svg-border rect{fill:none;stroke:rgba(232,255,99,.4);stroke-dasharray:0 10000;stroke-dashoffset:0;transition:stroke-dasharray .6s cubic-bezier(.22,1,.36,1)}
-.card:hover .card-svg-border rect{stroke-dasharray:10000 0}
-.card-icon{color:var(--fg-muted);margin-bottom:24px;transition:color .3s}
-.card:hover .card-icon{color:var(--fg)}
-.card-title{font-family:var(--sans);font-weight:600;font-size:20px;letter-spacing:-.01em;margin-bottom:14px}
-.card-body{font-size:15px;color:var(--fg-muted);line-height:1.65;margin-bottom:24px}
-.card-tags{display:flex;flex-wrap:wrap;gap:6px}
-.tag{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--fg-muted);border:1px solid var(--border);padding:4px 10px;border-radius:2px;transition:border-color .3s,color .3s}
-.card:hover .tag{border-color:rgba(232,255,99,.2);color:var(--fg-muted)}
-
-/* HOW WE WORK */
-#how-we-work{background:var(--bg)}
-.process-layout{display:grid;grid-template-columns:repeat(4,1fr);gap:0;background:var(--border)}
-.process-connector{display:none}
-.process-steps{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,1fr);gap:0;background:var(--border)}
-.process-step{background:var(--bg);padding:40px 36px 40px;border:none;opacity:0;transform:translateY(20px) scale(.98);transition:opacity .6s,transform .6s cubic-bezier(.22,1,.36,1);display:flex;flex-direction:column;gap:0;position:relative}
-.process-step::after{content:'';position:absolute;top:40px;right:0;width:1px;height:calc(100% - 80px);background:var(--border)}
-.process-step:last-child::after{display:none}
-.process-step.in{opacity:1;transform:translateY(0) scale(1)}
-.process-step:hover .step-num{color:var(--accent)}
-.step-num{font-family:var(--serif);font-style:normal;font-size:64px;line-height:1;letter-spacing:-.04em;color:var(--border);margin-bottom:32px;transition:color .4s}
-.step-num.active-step{color:var(--accent)}
-.step-title{font-family:var(--sans);font-weight:600;font-size:18px;letter-spacing:-.01em;margin-bottom:12px}
-.step-body{font-size:14px;color:var(--fg-muted);line-height:1.7}
-/* connector arrow between steps */
-.process-step:not(:last-child)::before{content:'→';position:absolute;top:50%;right:-14px;transform:translateY(-50%);color:var(--border);font-size:18px;z-index:2;background:var(--bg);padding:4px 2px}
-
-/* CASE STUDIES */
-#case-studies{background:var(--bg-elev)}
-.case-cards{display:flex;flex-direction:column;gap:24px;background:transparent}
-.case-card{background:var(--bg);display:grid;grid-template-columns:3fr 2fr;gap:0;position:relative;overflow:hidden;cursor:pointer;opacity:0;transform:translateY(24px) scale(.98);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1);border:1px solid var(--border);border-radius:3px}
-.case-card.in{opacity:1;transform:translateY(0) scale(1)}
-.case-card:hover{transform:translateY(-4px)!important}
-.case-card-svg-border{position:absolute;inset:0;pointer-events:none}
-.case-card-svg-border rect{fill:none;stroke:rgba(232,255,99,.4);stroke-dasharray:0 10000;transition:stroke-dasharray .6s cubic-bezier(.22,1,.36,1)}
-.case-card:hover .case-card-svg-border rect{stroke-dasharray:10000 0}
-.case-left{padding:48px;display:flex;flex-direction:column;gap:20px;border-right:1px solid var(--border)}
-.case-tag{font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--fg-muted)}
-.case-title{font-family:var(--serif);font-style:normal;font-size:28px;line-height:1.15}
-.case-block-label{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--fg-muted);margin-bottom:6px}
-.case-block-text{font-size:14px;color:var(--fg-muted);line-height:1.65}
-.case-impact-row{display:flex;gap:40px;margin-top:8px}
-.case-metric{display:flex;flex-direction:column;gap:4px}
-.metric-val{font-family:var(--serif);font-style:normal;font-size:36px;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums}
-.metric-label{font-size:12px;color:var(--fg-muted)}
-.case-right{padding:40px;display:flex;align-items:center;justify-content:center;background:var(--bg-elev)}
-.case-diagram{width:100%;max-width:280px;opacity:.7}
-
-/* CONTACT */
-#contact{background:var(--bg)}
-.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
-.contact-what-label{font-weight:600;font-size:16px;margin-bottom:16px}
-.contact-what-text{font-size:15px;color:var(--fg-muted);line-height:1.7}
-.form-group{display:flex;flex-direction:column;gap:0;position:relative;margin-bottom:32px}
-.form-group label{position:absolute;top:14px;left:0;font-size:14px;color:var(--fg-muted);transition:top .2s,font-size .2s,color .2s;pointer-events:none}
-.form-group.filled label,.form-group:focus-within label{top:-8px;font-size:11px;letter-spacing:.06em;color:var(--fg-muted)}
-.form-group input,.form-group textarea{background:transparent;border:none;border-bottom:1px solid var(--border);color:var(--fg);font-family:var(--sans);font-size:15px;padding:14px 0 10px;outline:none;width:100%;resize:none;transition:border-color .2s}
-.form-group::after{content:'';position:absolute;bottom:0;left:0;width:0;height:2px;background:var(--accent);transition:width .3s}
-.form-group:focus-within::after{width:100%}
-.form-group:focus-within input,.form-group:focus-within textarea{border-bottom-color:transparent}
-.contact-alt{font-size:13px;color:var(--fg-muted)}
-.booking-cta-wrap{display:flex;flex-direction:column;gap:24px;justify-content:center}
-.booking-btn{display:flex;align-items:center;justify-content:space-between;background:var(--accent);color:var(--accent-fg);text-decoration:none;padding:20px 28px;border-radius:3px;transition:gap .2s,transform .2s}
-.booking-btn:hover{transform:translateY(-2px)}
-.booking-btn-label{font-weight:600;font-size:17px;letter-spacing:-.01em}
-.booking-meta{display:flex;flex-direction:column;gap:12px}
-.booking-meta-item{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--fg-muted)}
-.booking-meta-icon{display:flex;align-items:center;color:var(--fg-muted)}
-.contact-alt a{color:var(--fg);text-decoration:underline;text-underline-offset:3px}
-
-/* FOOTER */
-footer{background:var(--bg-elev);border-top:1px solid var(--border);padding:80px 48px 0;position:relative;overflow:hidden}
-.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:48px;max-width:1200px;margin:0 auto;padding-bottom:64px}
-.footer-wordmark{font-weight:600;font-size:17px;letter-spacing:-.01em;margin-bottom:12px}
-.footer-tagline{font-size:14px;color:var(--fg-muted);margin-bottom:6px}
-.footer-loc{font-size:13px;color:var(--fg-muted)}
-.footer-col-label{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--fg-muted);margin-bottom:18px}
-.footer-links{list-style:none;display:flex;flex-direction:column;gap:10px}
-.footer-links a{color:var(--fg-muted);text-decoration:none;font-size:14px;transition:color .2s}
-.footer-links a:hover{color:var(--fg)}
-.footer-cta{margin-top:4px}
-.footer-cta .btn-primary{font-size:13px}
-.footer-bottom{max-width:1200px;margin:0 auto;padding:20px 0;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;position:relative;z-index:2}
-.footer-copy{font-size:13px;color:var(--fg-muted)}
-.footer-watermark{position:absolute;bottom:0;left:0;right:0;font-family:var(--serif);font-style:normal;font-size:clamp(80px,18vw,300px);line-height:.85;color:var(--bg);text-align:center;letter-spacing:-.04em;pointer-events:none;user-select:none;white-space:nowrap;z-index:1}
-
-/* SCROLL ANIMATION BASE */
-.scroll-fade{opacity:0;transform:translateY(16px);transition:opacity .6s ease-out,transform .6s ease-out}
-.scroll-fade.in{opacity:1;transform:translateY(0)}
-
-/* ABOUT */
-#about{background:var(--bg)}
-.about-grid{display:grid;grid-template-columns:1fr 1.6fr;gap:80px;margin-bottom:64px;align-items:start}
-.about-left .section-headline{margin-bottom:0}
-.about-right p{font-size:16px;color:var(--fg-muted);line-height:1.75}
-.about-right p+p{margin-top:16px}
-.about-stats{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--border);padding-top:48px;gap:0}
-.about-stat{padding-right:40px}
-.about-stat-num{font-family:var(--serif);font-style:normal;font-size:clamp(18px,2.5vw,28px);color:var(--fg);line-height:1.1;margin-bottom:6px}
-.about-stat-label{font-size:13px;color:var(--fg-muted);line-height:1.5}
-@media(max-width:900px){.about-grid{grid-template-columns:1fr;gap:32px}.about-stats{grid-template-columns:1fr;gap:24px}.about-stat{padding-right:0;border-bottom:1px solid var(--border);padding-bottom:24px}.about-stat:last-child{border-bottom:none}}
-
-/* UTILS */
-em{font-style:normal}
-@media(max-width:900px){
-  #hero{padding:100px 24px 60px}
-  .hero-inner{grid-template-columns:1fr}
-  .hero-visual{display:none}
-  #nav{padding:16px 24px}
-  .nav-links{display:none}
-  section{padding:80px 24px}
-  .cards-grid{grid-template-columns:1fr;gap:16px}
-  .case-card{grid-template-columns:1fr}
-  .case-right{display:none}
-  .contact-grid{grid-template-columns:1fr}
-  .footer-grid{grid-template-columns:1fr 1fr}
-  .process-layout{grid-template-columns:1fr}
-  .process-connector{display:none}
-}
-@media(prefers-reduced-motion:reduce){
-  *{animation-duration:.01ms!important;transition-duration:.01ms!important}
-  .hero-headline .word,.section-headline .word{opacity:1!important;transform:none!important;filter:none!important}
-  .eyebrow,.hero-sub,.hero-ctas,.status-line,.card,.case-card,.process-step,.scroll-fade,.section-sub{opacity:1!important;transform:none!important}
-}
-</style>
+  <!-- Reveal targets and the nav default to opacity:0 and are cleared by the
+       inline script. With JS off (or blocked) that would serve a blank page,
+       so the no-JS branch forces the finished state. Mirrors the
+       prefers-reduced-motion block in styles.css §20. -->
+  <noscript><style>
+    .eyebrow, .section-sub, .hero-sub, .hero-ctas, .status-line, .card,
+    .case-card, .process-step, .scroll-fade, .cs-block, .sidebar-card,
+    .cs-reveal, .site-nav, .word, .mock-card-a, .mock-card-b {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    #hairline { display: none !important; }
+  </style></noscript>
 </head>
 <body>
 
-<!-- Hairline reveal -->
 <div id="hairline"></div>
+<a href="#main" class="skip-link">Skip to content</a>
 
-<!-- NAV -->
-<nav id="nav">
-  <a href="#" class="nav-logo"><img src="logo.svg" alt="Custom AI logo">Custom AI</a>
-  <ul class="nav-links">
-    <li><a href="#what-we-do">what we do</a></li>
-    <li><a href="#how-we-work">how we work</a></li>
-    <li><a href="#case-studies">case studies</a></li>
-    <li><a href="#about">about</a></li>
-    <li><a href="#contact">contact</a></li>
-  </ul>
-  <a href="#contact" class="btn-primary">Book a Call <span>→</span></a>
+<!-- ==========================================================================
+     NAV — fixed chrome. Opaque near-black + white logo + outlined CTA over
+     #how-we-work and #contact; translucent white + dark logo + blue CTA over
+     every light band, the hero included.
+     ========================================================================== -->
+<nav class="site-nav" id="nav">
+  <div class="container nav-inner">
+
+    <a href="#" class="nav-logo">
+      <img class="logo-dark" src="logo-wordmark.png" alt="Custom AI" width="1165" height="245" decoding="async">
+      <img class="logo-light" src="logo-wordmark-white.png" alt="" aria-hidden="true" width="1165" height="245" decoding="async">
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#what-we-do">What We Do</a></li>
+      <li><a href="#how-we-work">How We Work</a></li>
+      <li><a href="#case-studies">Case Studies</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <a href="#contact" class="btn-primary nav-cta">Book a Call <span>→</span></a>
+
+    <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-sheet">
+      <span class="sr-only">Menu</span>
+    </button>
+
+  </div>
 </nav>
 
-<!-- HERO -->
-<section id="hero">
-  <div class="hero-inner">
-    <div class="hero-content">
-    <div class="eyebrow">— BESPOKE AI FOR INDUSTRY</div>
-    <h1 class="hero-headline" id="hero-headline"></h1>
-    <p class="hero-sub" id="hero-sub">We help operating businesses move from AI experiments to AI that ships. Custom-built for your workflow, your data, and your constraints — engineered to deliver measurable outcomes, not demos.</p>
-    <div class="status-line" id="status-line">
-      <span class="status-arrow">→</span>
-      <div class="status-text-wrap" id="status-wrap"></div>
-      <span class="status-cursor">·</span>
-    </div>
-    <div class="hero-ctas" id="hero-ctas">
-      <a href="#contact" class="btn-primary">Book a Discovery Call <span>→</span></a>
-      <a href="#what-we-do" class="btn-ghost">See what we build ↓</a>
-    </div>
-    </div>
-  <div class="hero-visual" id="hero-visual">
-    <canvas id="schematic-canvas" width="520" height="380" style="width:100%;max-width:520px"></canvas>
+<!-- Mobile sheet — active at ≤900px. Bars are CSS, never a CDN icon. -->
+<div class="nav-sheet" id="nav-sheet" aria-hidden="true">
+  <div class="nav-sheet-top">
+    <img src="logo-wordmark-white.png" alt="Custom AI" width="1165" height="245" loading="lazy" decoding="async">
+    <button type="button" class="nav-sheet-close" id="nav-sheet-close">
+      <span class="sr-only">Close menu</span>
+    </button>
   </div>
-  </div><!-- end hero-inner -->
-</section>
+  <ul class="nav-sheet-links">
+    <li><a href="#what-we-do">What We Do</a></li>
+    <li><a href="#how-we-work">How We Work</a></li>
+    <li><a href="#case-studies">Case Studies</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="btn-primary nav-sheet-cta">Book a Call <span>→</span></a>
+</div>
 
-<!-- WHAT WE DO -->
-<section id="what-we-do">
-  <div class="section-inner">
-    <div class="section-head">
-      <div class="eyebrow">— WHAT WE DO</div>
-      <h2 class="section-headline">We design and build AI that runs <em>inside</em> your business — not next to it.</h2>
-      <p class="section-sub">Every engagement starts with a real business problem. We build the system around it. Three categories of work, all custom, all production.</p>
-    </div>
-    <div class="cards-grid">
-      <!-- Card 1 -->
-      <div class="card" data-delay="0">
-        <svg class="card-svg-border" id="csb-0"><rect width="100%" height="100%" rx="0" ry="0"/></svg>
-        <div class="card-icon"><i data-lucide="repeat-2" width="24" height="24" stroke-width="1.25"></i></div>
-        <h3 class="card-title">Reduce Manual Work</h3>
-        <p class="card-body">AI agents that take ownership of repetitive knowledge work — document review, data extraction, classification, reconciliation — so your team can focus on the work only humans should do.</p>
-        <div class="card-tags">
-          <span class="tag">Document AI</span>
-          <span class="tag">Agents</span>
-          <span class="tag">OCR & Extraction</span>
-        </div>
-      </div>
-      <!-- Card 2 -->
-      <div class="card" data-delay="100">
-        <svg class="card-svg-border" id="csb-1"><rect width="100%" height="100%" rx="0" ry="0"/></svg>
-        <div class="card-icon"><i data-lucide="sparkles" width="24" height="24" stroke-width="1.25"></i></div>
-        <h3 class="card-title">Accelerate Decisions</h3>
-        <p class="card-body">Internal copilots that surface insight from across your data — CRM, ops, contracts, support — so the people making decisions have the answer in seconds, not days.</p>
-        <div class="card-tags">
-          <span class="tag">RAG</span>
-          <span class="tag">Search</span>
-          <span class="tag">Copilots</span>
-        </div>
-        
-      </div>
-      <!-- Card 3 -->
-      <div class="card" data-delay="200">
-        <svg class="card-svg-border" id="csb-2"><rect width="100%" height="100%" rx="0" ry="0"/></svg>
-        <div class="card-icon"><i data-lucide="workflow" width="24" height="24" stroke-width="1.25"></i></div>
-        <h3 class="card-title">Automate Workflows End-to-End</h3>
-        <p class="card-body">Multi-step systems that don't just respond — they reason, plan, and execute across your existing tools. Quietly running in the background, 24/7.</p>
-        <div class="card-tags">
-          <span class="tag">Agentic AI</span>
-          <span class="tag">Integrations</span>
-          <span class="tag">MLOps</span>
-        </div>
-        
-      </div>
-    </div>
-  </div>
-</section>
+<main id="main">
 
-<!-- HOW WE WORK -->
-<section id="how-we-work">
-  <div class="section-inner">
-    <div class="section-head">
-      <div class="eyebrow">— HOW WE WORK</div>
-      <h2 class="section-headline">A complete engagement.</h2>
-      <p class="section-sub">We work alongside your team to design, build, and deploy. Every engagement follows a four-step process refined to ship production-grade AI in weeks, not quarters.</p>
-    </div>
-    <div class="process-layout">
-      <div class="process-steps">
-        <div class="process-step" data-step="0">
-          <div class="step-num" data-step-num="0">01</div>
-          <h3 class="step-title">Discover</h3>
-          <p class="step-body">We audit your workflow and data to find the highest-leverage place for AI. You leave week one with a scoped problem and a build plan.</p>
-        </div>
-        <div class="process-step" data-step="1">
-          <div class="step-num" data-step-num="1">02</div>
-          <h3 class="step-title">Design</h3>
-          <p class="step-body">We design the system around your constraints — compliance, data, existing tools. You approve the design before we write a line of code.</p>
-        </div>
-        <div class="process-step" data-step="2">
-          <div class="step-num" data-step-num="2">03</div>
-          <h3 class="step-title">Build</h3>
-          <p class="step-body">2-week sprints with working demos at every checkpoint. Models, agents, evals, infrastructure — all owned end-to-end.</p>
-        </div>
-        <div class="process-step" data-step="3">
-          <div class="step-num" data-step-num="3">04</div>
-          <h3 class="step-title">Deploy & Govern</h3>
-          <p class="step-body">We deploy, set up monitoring, and stay on for 90 days to make sure it works in the real world.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+  <!-- ========================================================================
+       1 · HERO — hero-band-light. A running system drawn in Coinbase Blue
+       inside a hairline product-UI card, beside an 80px ink headline.
+       ======================================================================== -->
+  <section id="hero" class="hero band-canvas">
+    <div class="container">
+      <div class="hero-grid">
 
-<!-- CASE STUDIES -->
-<section id="case-studies">
-  <div class="section-inner">
-    <div class="section-head">
-      <div class="eyebrow">— SOLUTIONS WE BUILD</div>
-      <h2 class="section-headline">Real problems. Production AI. Measurable outcomes.</h2>
-      <p class="section-sub">An example of the kind of system we design — drawn from a real problem we've scoped and are ready to build for the right partner.</p>
-    </div>
-    <div class="case-cards">
-      <div class="case-card" data-delay="0" onclick="location.href='case-studies/candidate-intelligence.html'" style="cursor:pointer">
-        <svg class="case-card-svg-border" id="ccsb-0" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"><rect width="100%" height="100%"/></svg>
-        <div class="case-left">
-          <span class="case-tag">RECRUITMENT / TALENT ACQUISITION</span>
-          <h3 class="case-title">Resume Scoring Agent</h3>
-          <div>
-            <div class="case-block-label">The Challenge</div>
-            <p class="case-block-text">The bottleneck wasn't volume — it was attention. By resume forty, the standard had drifted. By resume eighty, equally strong candidates were getting different verdicts depending on who reviewed them and when.</p>
-          </div>
-          <div>
-            <div class="case-block-label">The System</div>
-            <p class="case-block-text">A scoring agent that reads each resume against the job description, ranks candidates, and surfaces a shortlist with written rationale — so recruiters do the judging, not the reading.</p>
-          </div>
-          <div class="case-impact-row">
-            <div class="case-metric">
-              <span class="metric-val">&lt;10 min</span>
-              <span class="metric-label">full role shortlist</span>
+        <div class="hero-copy">
+          <div class="eyebrow">— BESPOKE AI FOR INDUSTRY</div>
+
+          <!-- Authored in the DOM, exactly like every .section-headline. The
+               word-splitter in boot() rewraps it; the accent span survives
+               whole because the splitter copies element nodes via outerHTML. -->
+          <h1 class="hero-headline" id="hero-headline">AI systems built for the work you actually <span class="accent-word">do.</span></h1>
+
+          <p class="hero-sub" id="hero-sub">We help operating businesses move from AI experiments to AI that ships. Custom-built for your workflow, your data, and your constraints — engineered to deliver measurable outcomes, not demos.</p>
+
+          <div class="status-line" id="status-line">
+            <span class="status-arrow">→</span>
+            <!-- All four ticker phrases are contract copy, so they live in the
+                 markup rather than in a JS array. JS only rotates .active. -->
+            <div class="status-text-wrap" id="status-wrap">
+              <span class="status-phrase active">Document extraction</span>
+              <span class="status-phrase">Decision agents</span>
+              <span class="status-phrase">Workflow automation</span>
+              <span class="status-phrase">Internal copilots</span>
             </div>
-            <div class="case-metric">
-              <span class="metric-val" data-target="85" data-suffix="%">0%</span>
-              <span class="metric-label">agreement with senior recruiter judgment</span>
-            </div>
+            <span class="status-cursor">·</span>
+          </div>
+
+          <div class="hero-ctas" id="hero-ctas">
+            <a href="#contact" class="btn-primary btn-lg">Book a Discovery Call <span>→</span></a>
+            <a href="#what-we-do" class="btn-secondary-light btn-lg">See what we build ↓</a>
           </div>
         </div>
-        <div class="case-right">
-          <svg class="case-diagram" viewBox="0 0 240 200" fill="none">
-            <rect x="10" y="10" width="60" height="30" rx="1" stroke="var(--border)" stroke-width="1"/>
-            <text x="40" y="29" text-anchor="middle" fill="var(--fg-muted)" font-family="Inter" font-size="8">Email</text>
-            <rect x="10" y="55" width="60" height="30" rx="1" stroke="var(--border)" stroke-width="1"/>
-            <text x="40" y="74" text-anchor="middle" fill="var(--fg-muted)" font-family="Inter" font-size="8">ATS</text>
-            <rect x="10" y="100" width="60" height="30" rx="1" stroke="var(--border)" stroke-width="1"/>
-            <text x="40" y="119" text-anchor="middle" fill="var(--fg-muted)" font-family="Inter" font-size="8">Forms</text>
-            <rect x="10" y="145" width="60" height="30" rx="1" stroke="var(--border)" stroke-width="1"/>
-            <text x="40" y="164" text-anchor="middle" fill="var(--fg-muted)" font-family="Inter" font-size="8">Resumes</text>
-            <path d="M70 25 L100 85" stroke="var(--border)" stroke-width="1"/>
-            <path d="M70 70 L100 85" stroke="var(--border)" stroke-width="1"/>
-            <path d="M70 115 L100 85" stroke="var(--border)" stroke-width="1"/>
-            <path d="M70 160 L100 85" stroke="var(--border)" stroke-width="1"/>
-            <rect x="100" y="65" width="60" height="40" rx="2" stroke="var(--fg)" stroke-width="1"/>
-            <text x="130" y="89" text-anchor="middle" fill="var(--fg)" font-family="Inter" font-size="8" font-weight="500">AGENT</text>
-            <path d="M160 85 L190 85" stroke="var(--border)" stroke-width="1"/>
-            <rect x="190" y="65" width="50" height="40" rx="1" stroke="var(--accent)" stroke-width="1"/>
-            <text x="215" y="83" text-anchor="middle" fill="var(--accent)" font-family="Inter" font-size="7">Ranked</text>
-            <text x="215" y="95" text-anchor="middle" fill="var(--accent)" font-family="Inter" font-size="7">Shortlist</text>
-          </svg>
+
+        <div class="hero-visual" id="hero-visual">
+
+          <div class="mock-card-a">
+            <div class="mock-head">
+              <span class="mock-dot"></span>
+              <span class="mock-label">PIPELINE</span>
+              <span class="mock-chip">LIVE</span>
+            </div>
+            <canvas id="schematic-canvas" aria-hidden="true"></canvas>
+          </div>
+
+          <div class="mock-card-b">
+            <span class="mock-label">SOURCES</span>
+            <ul class="mock-src-list">
+              <li class="mock-src-row"><span class="mock-src-plate"><span class="mock-src-dot"></span></span><span class="mock-src-label">Documents</span></li>
+              <li class="mock-src-row"><span class="mock-src-plate"><span class="mock-src-dot"></span></span><span class="mock-src-label">Databases</span></li>
+              <li class="mock-src-row"><span class="mock-src-plate"><span class="mock-src-dot"></span></span><span class="mock-src-label">Reports</span></li>
+              <li class="mock-src-row"><span class="mock-src-plate"><span class="mock-src-dot"></span></span><span class="mock-src-label">Workflows</span></li>
+            </ul>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       2 · WHAT WE DO — surface-soft. One blue moment: the word "inside".
+       ======================================================================== -->
+  <section id="what-we-do" class="band-soft">
+    <div class="container">
+
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">— WHAT WE DO</div>
+          <h2 class="section-headline">We design and build AI that runs <em>inside</em> your business — not next to it.</h2>
+        </div>
+        <p class="section-sub">Every engagement starts with a real business problem. We build the system around it. Three categories of work, all custom, all production.</p>
+      </div>
+
+      <div class="cards-grid">
+
+        <article class="card" data-delay="0">
+          <div class="card-icon"><i data-lucide="repeat-2" stroke-width="1.5" aria-hidden="true"></i></div>
+          <h3 class="card-title">Reduce Manual Work</h3>
+          <p class="card-body">AI agents that take ownership of repetitive knowledge work — document review, data extraction, classification, reconciliation — so your team can focus on the work only humans should do.</p>
+          <div class="card-tags">
+            <span class="tag">Document AI</span>
+            <span class="tag">Agents</span>
+            <span class="tag">OCR &amp; Extraction</span>
+          </div>
+        </article>
+
+        <article class="card" data-delay="100">
+          <div class="card-icon"><i data-lucide="sparkles" stroke-width="1.5" aria-hidden="true"></i></div>
+          <h3 class="card-title">Accelerate Decisions</h3>
+          <p class="card-body">Internal copilots that surface insight from across your data — CRM, ops, contracts, support — so the people making decisions have the answer in seconds, not days.</p>
+          <div class="card-tags">
+            <span class="tag">RAG</span>
+            <span class="tag">Search</span>
+            <span class="tag">Copilots</span>
+          </div>
+        </article>
+
+        <article class="card" data-delay="200">
+          <div class="card-icon"><i data-lucide="workflow" stroke-width="1.5" aria-hidden="true"></i></div>
+          <h3 class="card-title">Automate Workflows End-to-End</h3>
+          <p class="card-body">Multi-step systems that don't just respond — they reason, plan, and execute across your existing tools. Quietly running in the background, 24/7.</p>
+          <div class="card-tags">
+            <span class="tag">Agentic AI</span>
+            <span class="tag">Integrations</span>
+            <span class="tag">MLOps</span>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       3 · HOW WE WORK — cta-band-dark. A sticky headline column beside four
+       product-ui-card-dark step cards. One travelling blue moment: the active
+       step.
+       ======================================================================== -->
+  <section id="how-we-work" class="band-dark">
+    <div class="container">
+      <div class="process-layout">
+
+        <div class="process-head">
+          <div class="eyebrow">— HOW WE WORK</div>
+          <h2 class="section-headline">A complete engagement.</h2>
+          <p class="section-sub">We work alongside your team to design, build, and deploy. Every engagement follows a four-step process refined to ship production-grade AI in weeks, not quarters.</p>
+        </div>
+
+        <div class="process-steps">
+
+          <article class="process-step" data-step="0">
+            <div class="step-num" data-step-num="0">01</div>
+            <div class="step-rule"></div>
+            <h3 class="step-title">Discover</h3>
+            <p class="step-body">We audit your workflow and data to find the highest-leverage place for AI. You leave week one with a scoped problem and a build plan.</p>
+          </article>
+
+          <article class="process-step" data-step="1">
+            <div class="step-num" data-step-num="1">02</div>
+            <div class="step-rule"></div>
+            <h3 class="step-title">Design</h3>
+            <p class="step-body">We design the system around your constraints — compliance, data, existing tools. You approve the design before we write a line of code.</p>
+          </article>
+
+          <article class="process-step" data-step="2">
+            <div class="step-num" data-step-num="2">03</div>
+            <div class="step-rule"></div>
+            <h3 class="step-title">Build</h3>
+            <p class="step-body">2-week sprints with working demos at every checkpoint. Models, agents, evals, infrastructure — all owned end-to-end.</p>
+          </article>
+
+          <article class="process-step" data-step="3">
+            <div class="step-num" data-step-num="3">04</div>
+            <div class="step-rule"></div>
+            <h3 class="step-title">Deploy &amp; Govern</h3>
+            <p class="step-body">We deploy, set up monitoring, and stay on for 90 days to make sure it works in the real world.</p>
+          </article>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       4 · CASE STUDIES — canvas white. A real <a> in the h3, stretched over
+       the card. Two blue moments: the arrow plate and the output box.
+       ======================================================================== -->
+  <section id="case-studies" class="band-canvas">
+    <div class="container">
+
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">— SOLUTIONS WE BUILD</div>
+          <h2 class="section-headline">Real problems. Production AI. Measurable outcomes.</h2>
+        </div>
+        <p class="section-sub">An example of the kind of system we design — drawn from a real problem we've scoped and are ready to build for the right partner.</p>
+      </div>
+
+      <div class="case-cards">
+        <article class="case-card" data-delay="0">
+
+          <span class="case-arrow"><i data-lucide="arrow-up-right" stroke-width="1.5" aria-hidden="true"></i></span>
+
+          <div class="case-inner">
+
+            <div class="case-left">
+              <span class="case-tag">RECRUITMENT / TALENT ACQUISITION</span>
+
+              <h3 class="case-title"><a href="case-studies/candidate-intelligence.html">Resume Scoring Agent</a></h3>
+
+              <div class="case-block">
+                <div class="case-block-label">The Challenge</div>
+                <p class="case-block-text">The bottleneck wasn't volume — it was attention. By resume forty, the standard had drifted. By resume eighty, equally strong candidates were getting different verdicts depending on who reviewed them and when.</p>
+              </div>
+
+              <div class="case-block">
+                <div class="case-block-label">The System</div>
+                <p class="case-block-text">A scoring agent that reads each resume against the job description, ranks candidates, and surfaces a shortlist with written rationale — so recruiters do the judging, not the reading.</p>
+              </div>
+
+              <hr class="case-rule">
+
+              <div class="case-impact-row">
+                <div class="case-metric">
+                  <span class="metric-val">&lt;10 min</span>
+                  <span class="metric-label">full role shortlist</span>
+                </div>
+                <div class="case-metric">
+                  <span class="metric-val" data-target="85" data-suffix="%">0%</span>
+                  <span class="metric-label">agreement with senior recruiter judgment</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="case-right">
+              <svg class="case-diagram" viewBox="0 0 240 200" fill="none" aria-hidden="true">
+                <rect x="10" y="10" width="60" height="30" rx="6" stroke="#dee1e6" stroke-width="1"/>
+                <text x="40" y="29" text-anchor="middle" fill="#5b616e" font-family="Inter" font-size="9">Email</text>
+                <rect x="10" y="55" width="60" height="30" rx="6" stroke="#dee1e6" stroke-width="1"/>
+                <text x="40" y="74" text-anchor="middle" fill="#5b616e" font-family="Inter" font-size="9">ATS</text>
+                <rect x="10" y="100" width="60" height="30" rx="6" stroke="#dee1e6" stroke-width="1"/>
+                <text x="40" y="119" text-anchor="middle" fill="#5b616e" font-family="Inter" font-size="9">Forms</text>
+                <rect x="10" y="145" width="60" height="30" rx="6" stroke="#dee1e6" stroke-width="1"/>
+                <text x="40" y="164" text-anchor="middle" fill="#5b616e" font-family="Inter" font-size="9">Resumes</text>
+                <path d="M70 25 L100 85" stroke="#dee1e6" stroke-width="1"/>
+                <path d="M70 70 L100 85" stroke="#dee1e6" stroke-width="1"/>
+                <path d="M70 115 L100 85" stroke="#dee1e6" stroke-width="1"/>
+                <path d="M70 160 L100 85" stroke="#dee1e6" stroke-width="1"/>
+                <rect x="100" y="65" width="60" height="40" rx="6" stroke="#0a0b0d" stroke-width="1"/>
+                <text x="130" y="89" text-anchor="middle" fill="#0a0b0d" font-family="Inter" font-size="8" font-weight="500">AGENT</text>
+                <path d="M160 85 L190 85" stroke="#dee1e6" stroke-width="1"/>
+                <rect x="190" y="65" width="50" height="40" rx="6" fill="rgba(0,82,255,.04)" stroke="#0052ff" stroke-width="1"/>
+                <text x="215" y="83" text-anchor="middle" fill="#0052ff" font-family="Inter" font-size="7">Ranked</text>
+                <text x="215" y="95" text-anchor="middle" fill="#0052ff" font-family="Inter" font-size="7">Shortlist</text>
+              </svg>
+            </div>
+
+          </div>
+        </article>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       5 · ABOUT — surface-soft. One blue moment: the word "Engineers."
+       ======================================================================== -->
+  <section id="about" class="band-soft">
+    <div class="container">
+
+      <div class="about-grid">
+        <div class="about-left">
+          <div class="eyebrow scroll-fade">— WHO WE ARE</div>
+          <h2 class="section-headline">Product people. <em>Engineers.</em> Builders.</h2>
+        </div>
+
+        <div class="about-right scroll-fade">
+          <p>We're a team of product managers and engineers — most of us from IIT Bombay — who've spent years building and shipping early-stage products across fintech, logistics, and B2B SaaS.</p>
+          <p>We started Custom AI because we kept seeing the same thing: enterprises spending on AI pilots that never shipped, and vendors selling strategy decks instead of working systems. We build the other thing — AI that runs in production, solves a specific problem, and moves a metric you actually care about.</p>
+          <p>We take a small number of engagements at a time because we prefer to go deep. Every client works with the same team that scoped the problem — not a delivery team handed a brief.</p>
         </div>
       </div>
-    </div>
-  </div>
-</section>
 
-<!-- ABOUT -->
-<section id="about">
-  <div class="section-inner">
-    <div class="section-head">
-      <div class="eyebrow scroll-fade">— WHO WE ARE</div>
-    </div>
-    <div class="about-grid">
-      <div class="about-left">
-        <h2 class="section-headline">Product people. <em>Engineers.</em> Builders.</h2>
+      <div class="about-stats">
+        <div class="about-stat scroll-fade">
+          <div class="about-stat-num">IIT Bombay</div>
+          <div class="about-stat-label">Where most of us met and built our first products</div>
+        </div>
+        <div class="about-stat scroll-fade">
+          <div class="about-stat-num"><span class="mono">10+</span> products</div>
+          <div class="about-stat-label">Shipped across fintech, logistics, and B2B SaaS</div>
+        </div>
+        <div class="about-stat scroll-fade">
+          <div class="about-stat-num">Outcomes only</div>
+          <div class="about-stat-label">We don't take projects we don't think we can move the needle on</div>
+        </div>
       </div>
-      <div class="about-right scroll-fade">
-        <p>We're a team of product managers and engineers — most of us from IIT Bombay — who've spent years building and shipping early-stage products across fintech, logistics, and B2B SaaS.</p>
-        <p>We started Custom AI because we kept seeing the same thing: enterprises spending on AI pilots that never shipped, and vendors selling strategy decks instead of working systems. We build the other thing — AI that runs in production, solves a specific problem, and moves a metric you actually care about.</p>
-        <p>We take a small number of engagements at a time because we prefer to go deep. Every client works with the same team that scoped the problem — not a delivery team handed a brief.</p>
-      </div>
-    </div>
-    <div class="about-stats">
-      <div class="about-stat scroll-fade">
-        <div class="about-stat-num">IIT Bombay</div>
-        <div class="about-stat-label">Where most of us met and built our first products</div>
-      </div>
-      <div class="about-stat scroll-fade">
-        <div class="about-stat-num">10+ products</div>
-        <div class="about-stat-label">Shipped across fintech, logistics, and B2B SaaS</div>
-      </div>
-      <div class="about-stat scroll-fade">
-        <div class="about-stat-num">Outcomes only</div>
-        <div class="about-stat-label">We don't take projects we don't think we can move the needle on</div>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- CONTACT -->
-<section id="contact">
-  <div class="section-inner">
-    <div class="section-head">
-      <div class="eyebrow">— GET IN TOUCH</div>
-      <h2 class="section-headline">Let's scope what AI can do for your <span style="color:var(--accent)">business.</span></h2>
-      <p class="section-sub">We take a small number of engagements at a time. If you have a real problem and a willingness to build, we'd like to hear about it. First conversation is 30 minutes and free.</p>
     </div>
-    <div class="contact-grid">
+  </section>
+
+  <!-- ========================================================================
+       6 · CONTACT — cta-band-dark. The second and last dark moment.
+       Two blue moments: the booking pill and the rule under "business."
+       ======================================================================== -->
+  <section id="contact" class="band-dark">
+    <div class="container">
+
+      <div class="contact-head">
+        <div class="eyebrow">— GET IN TOUCH</div>
+        <h2 class="section-headline">Let's scope what AI can do for your <span class="accent-word">business.</span></h2>
+        <p class="section-sub">We take a small number of engagements at a time. If you have a real problem and a willingness to build, we'd like to hear about it. First conversation is 30 minutes and free.</p>
+      </div>
+
+      <div class="contact-grid">
+
+        <div class="contact-panel">
+          <p class="contact-what-label">What to expect</p>
+          <p class="contact-what-text">A 30-minute conversation. We'll ask about your workflow, your data, and the metric you'd want to move. If we think we can help, we'll send a one-page scope within 48 hours. If we don't, we'll tell you and point you somewhere better.</p>
+        </div>
+
+        <div class="contact-panel booking-cta-wrap">
+          <a href="https://calendar.app.google/38yqGC61nYZwUVnCA" target="_blank" rel="noopener noreferrer" class="booking-btn">
+            <span class="booking-btn-label">Book a 30-minute discovery call →</span>
+          </a>
+          <ul class="booking-meta">
+            <li class="booking-meta-item">
+              <span class="booking-meta-plate"><i data-lucide="clock" stroke-width="1.5" aria-hidden="true"></i></span>
+              <span class="booking-meta-label">30 minutes</span>
+            </li>
+            <li class="booking-meta-item">
+              <span class="booking-meta-plate"><i data-lucide="video" stroke-width="1.5" aria-hidden="true"></i></span>
+              <span class="booking-meta-label">Google Meet or Zoom</span>
+            </li>
+            <li class="booking-meta-item">
+              <span class="booking-meta-plate"><i data-lucide="circle-dollar-sign" stroke-width="1.5" aria-hidden="true"></i></span>
+              <span class="booking-meta-label">Free, no commitment</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ==========================================================================
+     7 · FOOTER — footer-light on white, then the legal band.
+     ========================================================================== -->
+<footer class="site-footer">
+  <div class="container">
+
+    <div class="footer-grid">
+
       <div>
-        <p class="contact-what-label">What to expect</p>
-        <p class="contact-what-text">A 30-minute conversation. We'll ask about your workflow, your data, and the metric you'd want to move. If we think we can help, we'll send a one-page scope within 48 hours. If we don't, we'll tell you and point you somewhere better.</p>
+        <div class="footer-wordmark">Custom AI</div>
+        <div class="footer-tagline">Bespoke AI for industry.</div>
+        <div class="footer-loc">Based in Bengaluru. Working globally.</div>
       </div>
-      <div class="booking-cta-wrap">
-        <a href="https://calendar.app.google/38yqGC61nYZwUVnCA" target="_blank" rel="noopener" class="booking-btn">
-          <span class="booking-btn-label">Book a 30-minute discovery call →</span>
-        </a>
-        <div class="booking-meta">
-          <div class="booking-meta-item">
-            <span class="booking-meta-icon"><i data-lucide="clock" width="14" height="14" stroke-width="1.5"></i></span>
-            30 minutes
-          </div>
-          <div class="booking-meta-item">
-            <span class="booking-meta-icon"><i data-lucide="video" width="14" height="14" stroke-width="1.5"></i></span>
-            Google Meet or Zoom
-          </div>
-          <div class="booking-meta-item">
-            <span class="booking-meta-icon"><i data-lucide="circle-dollar-sign" width="14" height="14" stroke-width="1.5"></i></span>
-            Free, no commitment
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-grid">
-    <div>
-      <div class="footer-wordmark">Custom AI</div>
-      <div class="footer-tagline">Bespoke AI for industry.</div>
-      <div class="footer-loc">Based in Bengaluru. Working globally.</div>
+      <div>
+        <div class="footer-col-label">Navigate</div>
+        <ul class="footer-links">
+          <li><a href="#what-we-do">What We Do</a></li>
+          <li><a href="#how-we-work">How We Work</a></li>
+          <li><a href="#case-studies">Case Studies</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-label">Connect</div>
+        <ul class="footer-links">
+          <li><a href="https://www.linkedin.com/company/yourcustomai/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+          <li><a href="https://www.instagram.com/customai.co.in/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+          <li><a href="mailto:kartik@customai.co.in">Email</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-cta">
+        <div class="footer-col-label">Get in touch</div>
+        <a href="#contact" class="btn-primary">Book a discovery call →</a>
+      </div>
+
     </div>
-    <div>
-      <div class="footer-col-label">Navigate</div>
-      <ul class="footer-links">
-        <li><a href="#what-we-do">What We Do</a></li>
-        <li><a href="#how-we-work">How We Work</a></li>
-        <li><a href="#case-studies">Case Studies</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
+
+    <div class="footer-legal">
+      <span class="footer-copy">© 2026 Custom AI. All rights reserved.</span>
     </div>
-    <div>
-      <div class="footer-col-label">Connect</div>
-      <ul class="footer-links">
-        <li><a href="#">LinkedIn</a></li>
-        <li><a href="#">X</a></li>
-        <li><a href="#">GitHub</a></li>
-        <li><a href="mailto:hello@customai.com">Email</a></li>
-      </ul>
-    </div>
-    <div class="footer-cta">
-      <div class="footer-col-label">Get in touch</div>
-      <a href="#contact" class="btn-primary">Book a discovery call →</a>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <span class="footer-copy">© 2026 Custom AI. All rights reserved.</span>
+
   </div>
 </footer>
 
-<style>
-.pulse-dot{animation:pulse-node 3s ease-in-out infinite}
-@keyframes pulse-node{0%,100%{opacity:.7}50%{opacity:1}}
-</style>
-
 <script>
-// ─── INIT ───
-lucide.createIcons();
+/* ==========================================================================
+   Custom AI — index.html behaviour.
+   Two curves, one guard. Everything registered here is either one-shot or
+   torn down when it leaves the viewport. Nothing runs under reduced motion
+   except the observers that only make things visible.
+   ========================================================================== */
+(function () {
+  'use strict';
 
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var hasIO  = 'IntersectionObserver' in window;
 
+  function $(sel, ctx) { return (ctx || document).querySelector(sel); }
+  function $$(sel, ctx) { return Array.prototype.slice.call((ctx || document).querySelectorAll(sel)); }
 
-// ─── NAV ───
-const nav=document.getElementById('nav');
-window.addEventListener('scroll',()=>{
-  nav.classList.toggle('scrolled',window.scrollY>80);
-},{ passive:true });
+  /* ------------------------------------------------------------------------
+     THE HERO SCHEMATIC CANVAS
+     Ported from the previous build: same particle physics, spawn rates,
+     easing, dash pattern, glow maths and ping cadence. Re-themed to the
+     light-card tokens (product-ui-card-light on {colors.canvas}), re-centred
+     into a 520x240 logical space (every y is the old y minus 61),
+     devicePixelRatio-aware, and paused whenever it is off-screen, the tab is
+     hidden, or motion is reduced.
+     ------------------------------------------------------------------------ */
+  var schematic = (function () {
+    var canvas = document.getElementById('schematic-canvas');
+    var noop = { activate: function () {} };
+    if (!canvas) return noop;
+    var ctx = canvas.getContext && canvas.getContext('2d');
+    if (!ctx) return noop;
 
-// ─── HERO HEADLINE BUILD ───
-const heroHL=document.getElementById('hero-headline');
-const heroWords=['AI','systems','built','for','the','work','you','actually','<span class="accent-word">do.</span>'];
-heroWords.forEach((w,i)=>{
-  const span=document.createElement('span');
-  span.className='word';
-  span.innerHTML=w;
-  heroHL.appendChild(span);
-});
+    var W = 520, H = 240;
+    var cardA = canvas.parentNode;
+    var hero  = document.getElementById('hero');
 
-// ─── SECTION HEADLINES ───
-document.querySelectorAll('.section-headline').forEach(hl=>{
-  const html=hl.innerHTML;
-  // preserve em tags
-  const tmp=document.createElement('div');
-  tmp.innerHTML=html;
-  const words=[];
-  function processNode(node){
-    if(node.nodeType===3){
-      node.textContent.split(/\s+/).filter(Boolean).forEach(w=>words.push({type:'text',val:w}));
-    } else {
-      words.push({type:'elem',val:node.outerHTML});
+    /* Colour contract — the light palette, for a product-ui-card-light on
+       {colors.canvas}. Three levels in the dark build's ORDER — faintest =
+       grid, structure = hairline, focus = ink — but the separation is carried
+       by COLOUR ALONE, at a uniform 1px stroke. That is how the site's other
+       schematic already works: the #case-studies SVG draws its focus node
+       stroke="#0a0b0d" stroke-width="1" beside stroke="#dee1e6" siblings.
+       Do not re-add the dark build's 1.5px to the MODEL box — that width was
+       compensation for a 38%-alpha white stroke. At full ink it stacks, and
+       because lw() runs under a dpr*s transform it grows with the card: at the
+       1024px breakpoint (s ~= 1.86) it rendered ~2.8 CSS px of solid black,
+       heavier than any rule or border anywhere else on the site. */
+    var C = {
+      grid:      '#eef0f3',   /* {colors.hairline-soft} grid, drawn at a=0.5   */
+      box:       '#dee1e6',   /* {colors.hairline} DATA / ACTION strokes, 1px  */
+      boxStrong: '#0a0b0d',   /* {colors.ink} MODEL box stroke, 1px            */
+      connector: '#dee1e6',   /* {colors.hairline} connectors + arrowheads     */
+      label:     '#0a0b0d',   /* {colors.ink} node labels, 11px/500            */
+      labelSoft: '#5b616e'    /* {colors.body} the MODEL sub-label             */
+    };
+    var ACCENT = '0,82,255';                 /* {colors.primary} — the circuit */
+
+    var nodes = {
+      data:   { x: 24,  y: 94, w: 100, h: 52, label: 'DATA',   sub: null },
+      model:  { x: 200, y: 82, w: 120, h: 76, label: 'MODEL',  sub: 'inference · eval · ops' },
+      action: { x: 396, y: 94, w: 100, h: 52, label: 'ACTION', sub: null }
+    };
+    var connectors = [
+      { x1: 124, y1: 120, x2: 200, y2: 120, particles: [] },
+      { x1: 320, y1: 120, x2: 396, y2: 120, particles: [] }
+    ];
+    var junctions = [[200, 120], [320, 120], [260, 82]];
+
+    function spawnParticle(conn) {
+      conn.particles.push({ t: Math.random(), speed: 0.003 + Math.random() * 0.003, life: 1 });
     }
-  }
-  tmp.childNodes.forEach(processNode);
-  hl.innerHTML='';
-  words.forEach((w,i)=>{
-    const span=document.createElement('span');
-    span.className='word';
-    span.innerHTML=w.val;
-    hl.appendChild(span);
-    if(i<words.length-1) hl.appendChild(document.createTextNode(' '));
-  });
-});
+    connectors.forEach(function (c) { for (var i = 0; i < 3; i++) spawnParticle(c); });
 
-// ─── STATUS LINE ───
-const phrases=['Document extraction','Decision agents','Workflow automation','Internal copilots'];
-const wrap=document.getElementById('status-wrap');
-let phraseEls=[];
-phrases.forEach((p,i)=>{
-  const el=document.createElement('span');
-  el.className='status-phrase'+(i===0?' active':'');
-  el.textContent=p;
-  wrap.appendChild(el);
-  phraseEls.push(el);
-});
-let cur_phrase=0;
-function cyclePhrase(){
-  phraseEls[cur_phrase].classList.remove('active');
-  phraseEls[cur_phrase].classList.add('exit');
-  const old=cur_phrase;
-  setTimeout(()=>phraseEls[old].classList.remove('exit'),300);
-  cur_phrase=(cur_phrase+1)%phrases.length;
-  phraseEls[cur_phrase].classList.add('active');
-}
-setInterval(cyclePhrase,2200);
+    var pings = [];
+    function spawnPing() { pings.push({ r: 3, maxR: 28, life: 1, x: 260, y: 82 }); }
 
-// ─── SCHEMATIC CANVAS ANIMATION ───
-(function(){
-  const canvas = document.getElementById('schematic-canvas');
-  if(!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const W=520, H=380;
-  canvas.width=W; canvas.height=H;
+    var t = 0, glowT = 0;
+    var s = 1, dprNow = 1;
 
-  // Colors from CSS vars (read computed)
-  const style = getComputedStyle(document.documentElement);
-  const C = {
-    bg:     '#F8F6FF',
-    border: '#DDD6F5',
-    muted:  '#6E6490',
-    fg:     '#18102E',
-    accent: '#6C3FC2',
-  };
-
-  // ── Layout ──
-  const nodes = {
-    data:   {x:24,  y:155, w:100, h:52, label:'DATA',   sub:null,   bold:false},
-    model:  {x:200, y:143, w:120, h:76, label:'MODEL',  sub:'inference · eval · ops', bold:true},
-    action: {x:396, y:155, w:100, h:52, label:'ACTION', sub:null,   bold:false},
-  };
-  const subnodes = [
-    {x:24,  y:80,  w:80, h:34, label:'Documents'},
-    {x:24,  y:248, w:80, h:34, label:'Databases'},
-    {x:416, y:80,  w:80, h:34, label:'Reports'},
-    {x:416, y:248, w:80, h:34, label:'Workflows'},
-  ];
-  // Connector paths: [{x1,y1,x2,y2}]
-  const connectors = [
-    {x1:124, y1:181, x2:200, y2:181, particles:[]},
-    {x1:320, y1:181, x2:396, y2:181, particles:[]},
-  ];
-  const sublines = [
-    {x1:64, y1:114, x2:74, y2:155},
-    {x1:64, y1:248, x2:74, y2:207},
-    {x1:456, y1:114, x2:446, y2:155},
-    {x1:456, y1:248, x2:446, y2:207},
-  ];
-
-  // ── Particles ──
-  function spawnParticle(conn) {
-    conn.particles.push({t: Math.random(), speed: 0.003 + Math.random()*0.003, life:1});
-  }
-  connectors.forEach(c => {
-    for(let i=0;i<3;i++) spawnParticle(c);
-  });
-
-  // ── Ping rings on model ──
-  let pings = [];
-  function spawnPing() {
-    pings.push({r:3, maxR:28, life:1, x: nodes.model.x + nodes.model.w/2, y: nodes.model.y});
-  }
-  setInterval(spawnPing, 1400);
-
-  // ── Glow pulse on model ──
-  let glowT = 0;
-
-  // ── Draw helpers ──
-  function rect(x,y,w,h,stroke,lw,fill){
-    ctx.beginPath();
-    ctx.rect(x,y,w,h);
-    if(fill){ctx.fillStyle=fill;ctx.fill();}
-    ctx.strokeStyle=stroke; ctx.lineWidth=lw; ctx.stroke();
-  }
-  function line(x1,y1,x2,y2,color,lw,dash){
-    ctx.beginPath();
-    ctx.setLineDash(dash||[]);
-    ctx.moveTo(x1,y1); ctx.lineTo(x2,y2);
-    ctx.strokeStyle=color; ctx.lineWidth=lw; ctx.stroke();
-    ctx.setLineDash([]);
-  }
-  function arrow(x2,y2,dir){
-    // dir: 1=right
-    ctx.beginPath();
-    ctx.moveTo(x2-6, y2-4); ctx.lineTo(x2, y2); ctx.lineTo(x2-6, y2+4);
-    ctx.strokeStyle=C.muted; ctx.lineWidth=1; ctx.stroke();
-  }
-  function label(text, x, y, size, color, weight){
-    ctx.font = `${weight||400} ${size}px 'JetBrains Mono', monospace`;
-    ctx.fillStyle = color;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(text, x, y);
-  }
-
-  let t = 0;
-  function draw() {
-    ctx.clearRect(0,0,W,H);
-    t += 0.012;
-    glowT += 0.03;
-
-    // Grid lines
-    ctx.globalAlpha = 0.5;
-    line(0,60,W,60,C.border,1);
-    line(0,320,W,320,C.border,1);
-    line(60,0,60,H,C.border,1);
-    line(460,0,460,H,C.border,1);
-    ctx.globalAlpha = 1;
-
-    // Sub-connector lines
-    sublines.forEach(l => line(l.x1,l.y1,l.x2,l.y2,C.border,1));
-
-    // Sub-nodes
-    subnodes.forEach(n => {
-      rect(n.x,n.y,n.w,n.h,C.border,1);
-      label(n.label, n.x+n.w/2, n.y+n.h/2, 9, C.muted);
-    });
-
-    // Connector dashed lines + arrows
-    connectors.forEach(c => {
-      line(c.x1,c.y1,c.x2,c.y2,C.muted,1,[3,4]);
-      arrow(c.x2, c.y2, 1);
-    });
-
-    // Model glow
-    const glow = (Math.sin(glowT)*0.5+0.5);
-    const n = nodes.model;
-    if(glow > 0.01){
-      const grad = ctx.createRadialGradient(n.x+n.w/2, n.y+n.h/2, 0, n.x+n.w/2, n.y+n.h/2, 80);
-      grad.addColorStop(0, `rgba(108,63,194,${glow*0.12})`);
-      grad.addColorStop(1, 'rgba(108,63,194,0)');
-      ctx.fillStyle = grad;
-      ctx.beginPath(); ctx.ellipse(n.x+n.w/2, n.y+n.h/2, 80, 60, 0, 0, Math.PI*2); ctx.fill();
+    /* devicePixelRatio awareness. Node coordinates are never recomputed —
+       only the transform changes, so the 520-wide logical space still holds. */
+    function size() {
+      var cssW = canvas.clientWidth || W;
+      s = cssW / W;
+      dprNow = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width  = Math.round(W * s * dprNow);
+      canvas.height = Math.round(H * s * dprNow);
+      canvas.style.height = (H * s) + 'px';
+      ctx.setTransform(dprNow * s, 0, 0, dprNow * s, 0, 0);
     }
+    function lw(v) { return Math.max(v, 1 / (s * dprNow)); }
 
-    // Ping rings
-    pings = pings.filter(p => p.life > 0);
-    pings.forEach(p => {
-      p.r += (p.maxR - p.r) * 0.06;
-      p.life -= 0.018;
+    function pathRect(x, y, w, h, r) {
+      var rr = Math.min(r, w / 2, h / 2);
       ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-      ctx.strokeStyle = `rgba(108,63,194,${p.life * 0.6})`;
-      ctx.lineWidth = 1;
-      ctx.stroke();
-    });
+      if (ctx.roundRect) { ctx.roundRect(x, y, w, h, rr); return; }
+      ctx.moveTo(x + rr, y);
+      ctx.arcTo(x + w, y,     x + w, y + h, rr);
+      ctx.arcTo(x + w, y + h, x,     y + h, rr);
+      ctx.arcTo(x,     y + h, x,     y,     rr);
+      ctx.arcTo(x,     y,     x + w, y,     rr);
+      ctx.closePath();
+    }
+    function rect(x, y, w, h, stroke, width) {
+      pathRect(x, y, w, h, 6);
+      ctx.strokeStyle = stroke; ctx.lineWidth = lw(width); ctx.stroke();
+    }
+    function line(x1, y1, x2, y2, color, width, dash) {
+      ctx.beginPath();
+      ctx.setLineDash(dash || []);
+      ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
+      ctx.strokeStyle = color; ctx.lineWidth = lw(width); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    function arrow(x2, y2) {
+      ctx.beginPath();
+      ctx.moveTo(x2 - 6, y2 - 4); ctx.lineTo(x2, y2); ctx.lineTo(x2 - 6, y2 + 4);
+      ctx.strokeStyle = C.connector; ctx.lineWidth = lw(1); ctx.stroke();
+    }
+    function label(text, x, y, fs, color, weight) {
+      ctx.font = (weight || 400) + ' ' + fs + "px 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace";
+      ctx.fillStyle = color;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(text, x, y);
+    }
 
-    // Main nodes
-    [{node:nodes.data,border:C.muted,lw:1},
-     {node:nodes.model,border:C.fg,lw:1.5},
-     {node:nodes.action,border:C.muted,lw:1}
-    ].forEach(({node,border,lw}) => {
-      rect(node.x, node.y, node.w, node.h, border, lw);
-      label(node.label, node.x+node.w/2, node.y+(node.sub?node.h/2-10:node.h/2), 11, C.fg, 500);
-      if(node.sub) label(node.sub, node.x+node.w/2, node.y+node.h/2+10, 8, C.muted);
-    });
+    var STATIC_T = [0.25, 0.65];
 
-    // Particles
-    connectors.forEach(c => {
-      // Spawn
-      if(Math.random() < 0.025) spawnParticle(c);
-      c.particles = c.particles.filter(p => p.t <= 1 && p.life > 0);
-      c.particles.forEach(p => {
-        p.t += p.speed;
-        const px = c.x1 + (c.x2-c.x1)*p.t;
-        const py = c.y1 + (c.y2-c.y1)*p.t;
-        const fade = p.t < 0.15 ? p.t/0.15 : p.t > 0.85 ? (1-p.t)/0.15 : 1;
-        // Trail
+    function drawFrame(still) {
+      ctx.clearRect(0, 0, W, H);
+      if (!still) { t += 0.012; glowT += 0.03; }
+
+      /* grid */
+      ctx.globalAlpha = 0.5;
+      line(0, 24, W, 24, C.grid, 1);
+      line(0, 216, W, 216, C.grid, 1);
+      line(60, 0, 60, H, C.grid, 1);
+      line(460, 0, 460, H, C.grid, 1);
+      ctx.globalAlpha = 1;
+
+      /* dashed connectors + arrowheads */
+      connectors.forEach(function (c) {
+        line(c.x1, c.y1, c.x2, c.y2, C.connector, 1, [3, 4]);
+        arrow(c.x2, c.y2);
+      });
+
+      /* MODEL bloom — always on, so a still frame never reads flat */
+      var glow = still ? 0.5 : (Math.sin(glowT) * 0.5 + 0.5);
+      var n = nodes.model, cx = n.x + n.w / 2, cy = n.y + n.h / 2;
+      if (glow > 0.01) {
+        var grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 80);
+        /* 0.08, not the dark build's 0.16: on #16181c a 16% blue lifted to a
+           barely-there haze, on #ffffff it darkens to a visible blue stain.
+           Halved, it lands at the same perceptual weight. */
+        grad.addColorStop(0, 'rgba(' + ACCENT + ',' + (glow * 0.08) + ')');
+        grad.addColorStop(1, 'rgba(' + ACCENT + ',0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath(); ctx.ellipse(cx, cy, 80, 60, 0, 0, Math.PI * 2); ctx.fill();
+      }
+
+      /* ping rings */
+      if (!still) {
+        pings = pings.filter(function (p) { return p.life > 0; });
+        pings.forEach(function (p) {
+          p.r += (p.maxR - p.r) * 0.06;
+          p.life -= 0.018;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.strokeStyle = 'rgba(' + ACCENT + ',' + (p.life * 0.6) + ')';
+          ctx.lineWidth = lw(1);
+          ctx.stroke();
+        });
+      }
+
+      /* the three-node spine */
+      [{ node: nodes.data,   border: C.box,       width: 1 },
+       { node: nodes.model,  border: C.boxStrong, width: 1 },
+       { node: nodes.action, border: C.box,       width: 1 }].forEach(function (o) {
+        var nd = o.node;
+        rect(nd.x, nd.y, nd.w, nd.h, o.border, o.width);
+        label(nd.label, nd.x + nd.w / 2, nd.y + (nd.sub ? nd.h / 2 - 10 : nd.h / 2), 11, C.label, 500);
+        if (nd.sub) label(nd.sub, nd.x + nd.w / 2, nd.y + nd.h / 2 + 10, 8, C.labelSoft);
+      });
+
+      /* particles + gradient trails */
+      connectors.forEach(function (c) {
+        var list;
+        if (still) {
+          list = STATIC_T.map(function (v) { return { t: v }; });
+        } else {
+          if (Math.random() < 0.025) spawnParticle(c);
+          c.particles = c.particles.filter(function (p) { return p.t <= 1 && p.life > 0; });
+          list = c.particles;
+        }
+        list.forEach(function (p) {
+          if (!still) p.t += p.speed;
+          var px = c.x1 + (c.x2 - c.x1) * p.t;
+          var py = c.y1 + (c.y2 - c.y1) * p.t;
+          var fade = p.t < 0.15 ? p.t / 0.15 : (p.t > 0.85 ? (1 - p.t) / 0.15 : 1);
+          var tx0 = c.x1 + (c.x2 - c.x1) * Math.max(0, p.t - 0.12);
+          ctx.beginPath();
+          ctx.moveTo(tx0, py); ctx.lineTo(px, py);
+          var tg = ctx.createLinearGradient(tx0, py, px, py);
+          tg.addColorStop(0, 'rgba(' + ACCENT + ',0)');
+          tg.addColorStop(1, 'rgba(' + ACCENT + ',' + (fade * 0.7) + ')');
+          ctx.strokeStyle = tg; ctx.lineWidth = lw(1.5); ctx.setLineDash([]); ctx.stroke();
+          ctx.beginPath();
+          ctx.arc(px, py, 2.5, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(' + ACCENT + ',' + fade + ')';
+          ctx.fill();
+        });
+      });
+
+      /* pulsing junction dots */
+      junctions.forEach(function (pt, i) {
+        var pulse = still ? 1 : (Math.sin(t * 1.8 + i * 2.1) * 0.3 + 0.7);
         ctx.beginPath();
-        const tx0 = c.x1 + (c.x2-c.x1)*Math.max(0,p.t-0.12);
-        ctx.moveTo(tx0, py);
-        ctx.lineTo(px, py);
-        const grad = ctx.createLinearGradient(tx0,py,px,py);
-        grad.addColorStop(0,'rgba(108,63,194,0)');
-        grad.addColorStop(1,`rgba(108,63,194,${fade*0.7})`);
-        ctx.strokeStyle=grad; ctx.lineWidth=1.5; ctx.setLineDash([]); ctx.stroke();
-        // Dot
-        ctx.beginPath();
-        ctx.arc(px, py, 2.5, 0, Math.PI*2);
-        ctx.fillStyle = `rgba(108,63,194,${fade})`;
+        ctx.arc(pt[0], pt[1], 3, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(' + ACCENT + ',' + pulse + ')';
         ctx.fill();
       });
+    }
+
+    /* lifecycle — no setInterval anywhere, so a pause is total */
+    var raf = null, running = false, lastPing = 0;
+    function loop(ts) {
+      if (!running) return;
+      if (ts - lastPing > 1400) { spawnPing(); lastPing = ts; }
+      drawFrame(false);
+      raf = window.requestAnimationFrame(loop);
+    }
+    function start() {
+      if (running || reduce) return;
+      running = true; lastPing = 0;
+      raf = window.requestAnimationFrame(loop);
+    }
+    function stop() {
+      running = false;
+      if (raf) window.cancelAnimationFrame(raf);
+      raf = null;
+    }
+    function heroInView() {
+      if (!hero) return true;
+      var r = hero.getBoundingClientRect();
+      return r.bottom > 0 && r.top < (window.innerHeight || 0);
+    }
+
+    /* first draw is gated on the real JetBrains Mono face */
+    var fontsReady = (document.fonts && document.fonts.ready) ? document.fonts.ready : null;
+    function paintFirst() {
+      size();
+      drawFrame(true);
+      if (window.ResizeObserver && cardA) {
+        new window.ResizeObserver(function () {
+          size();
+          if (!running) drawFrame(reduce);
+        }).observe(cardA);
+      }
+    }
+    if (fontsReady && fontsReady.then) { fontsReady.then(paintFirst)['catch'](paintFirst); }
+    else { paintFirst(); }
+
+    function activate() {
+      if (reduce) return;
+      if (hasIO && hero) {
+        new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) { if (e.isIntersecting) start(); else stop(); });
+        }, { threshold: 0 }).observe(hero);
+      } else {
+        start();
+      }
+      document.addEventListener('visibilitychange', function () {
+        if (document.hidden) stop();
+        else if (heroInView()) start();
+      });
+    }
+
+    return { activate: activate };
+  })();
+
+  /* ------------------------------------------------------------------------
+     BOOT — everything below runs on DOMContentLoaded, which is after the
+     deferred lucide script has executed.
+     ------------------------------------------------------------------------ */
+  function boot() {
+
+    /* ---- 1 · headline word-split ----------------------------------------
+       Every headline, the h1 included, carries its copy in the markup. Text
+       nodes split on whitespace; element nodes (<em>, the accent span)
+       survive whole via outerHTML. The accent-word rule depends on this.   */
+    var heroHeadline = document.getElementById('hero-headline');
+
+    $$('.section-headline, #hero-headline').forEach(function (h) {
+      var parts = [];
+      Array.prototype.forEach.call(h.childNodes, function (node) {
+        if (node.nodeType === 3) {
+          node.textContent.split(/\s+/).forEach(function (w) { if (w) parts.push(w); });
+        } else if (node.nodeType === 1) {
+          parts.push(node.outerHTML);
+        }
+      });
+      h.innerHTML = parts.map(function (p) { return '<span class="word">' + p + '</span>'; }).join(' ');
     });
 
-    // Connector junction dots (static accent dots at node boundaries)
-    [[200,181],[320,181],[260,143]].forEach(([dx,dy],i) => {
-      const pulse = Math.sin(t*1.8 + i*2.1)*0.3+0.7;
-      ctx.beginPath(); ctx.arc(dx,dy,3,0,Math.PI*2);
-      ctx.fillStyle=`rgba(108,63,194,${pulse})`; ctx.fill();
+    /* ---- 2 · status ticker ------------------------------------------------
+       The four phrases are authored in the markup; JS only walks .active. */
+    var wrap = document.getElementById('status-wrap');
+    var phraseEls = wrap ? $$('.status-phrase', wrap) : [];
+    var phraseIdx = 0;
+    function cyclePhrase() {
+      var cur = phraseEls[phraseIdx];
+      phraseIdx = (phraseIdx + 1) % phraseEls.length;
+      var next = phraseEls[phraseIdx];
+      cur.classList.remove('active');
+      cur.classList.add('exit');
+      window.setTimeout(function () { cur.classList.remove('exit'); }, 300);
+      next.classList.add('active');
+    }
+
+    /* ---- 3 · nav state ---------------------------------------------------
+       One observer, a 1px detection line at the nav's MID-LINE (y 32-33),
+       watching the two dark bands — #how-we-work and #contact.
+
+       Why the mid-line and not either edge. The light nav is translucent
+       (--nav-bg-light, 88% white) over a 12px backdrop blur, so while a dark
+       band's top edge sits behind the strip the nav renders as a white-to-grey
+       vertical smear (88% white over #0a0b0d resolves to ~#e1e1e1). A line at
+       y=0 only flips once the band has covered the WHOLE 64px strip, so that
+       smear ran for a full nav-height. A line at y=64 flips a whole nav-height
+       early, leaving an opaque black bar detached above the band by a growing
+       light gap. y=32 halves both: the worst case is ~32px either way.
+
+       Entry and exit are deliberately asymmetric. Entry (band top crossing
+       y=32) is what this margin moves; exit still waits for the band's BOTTOM
+       to clear y=0, because by then the nav is opaque --color-surface-dark and
+       an opaque strip over a light band is a clean hard edge, not a smear.
+
+       The nav's LOAD state is the light one (.site-nav's base rule), which is
+       correct over the light hero — there is no pre-emptive .on-dark here.
+       Rebuilt on resize because rootMargin takes no calc(). */
+    var nav = document.getElementById('nav');
+    var darkBands = ['how-we-work', 'contact']
+      .map(function (id) { return document.getElementById(id); })
+      .filter(Boolean);
+    var over = {};
+    var navObs = null;
+
+    function syncNav() {
+      if (!nav) return;
+      var hit = darkBands.some(function (b) { return over[b.id]; });
+      nav.classList.toggle('on-dark', hit);
+    }
+    function buildNavObserver() {
+      if (!nav || !hasIO || !darkBands.length) return;
+      if (navObs) navObs.disconnect();
+      var below = Math.max(0, (window.innerHeight || 0) - 33);
+      navObs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { over[e.target.id] = e.isIntersecting; });
+        syncNav();
+      }, { rootMargin: '0px 0px -' + below + 'px 0px', threshold: 0 });
+      darkBands.forEach(function (b) { navObs.observe(b); });
+    }
+    buildNavObserver();
+    window.addEventListener('resize', buildNavObserver);
+
+    /* ---- 4 · mobile sheet ------------------------------------------------- */
+    var toggle = document.getElementById('nav-toggle');
+    var sheet = document.getElementById('nav-sheet');
+    var sheetClose = document.getElementById('nav-sheet-close');
+    var sheetIsOpen = false, closeTimer = null;
+
+    /* The sheet is a full-viewport overlay. The Tab trap below only holds
+       keyboard focus; without inert, a virtual cursor or swipe navigation
+       walks straight past the sheet into the page behind it. The nav strip
+       itself needs no treatment — its links and CTA are display:none at this
+       breakpoint and the toggle must stay reachable for focus return. */
+    var behindSheet = [document.getElementById('main'), $('.site-footer')]
+      .filter(Boolean);
+    function setBehindInert(state) {
+      behindSheet.forEach(function (el) { el.inert = state; });
+    }
+
+    function sheetFocusables() {
+      return $$('a[href], button', sheet).filter(function (el) { return el.offsetParent !== null; });
+    }
+    function openSheet() {
+      if (!sheet || sheetIsOpen) return;
+      sheetIsOpen = true;
+      if (closeTimer) { window.clearTimeout(closeTimer); closeTimer = null; }
+      setBehindInert(true);
+      sheet.classList.add('open');
+      sheet.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('nav-open');
+      if (toggle) toggle.setAttribute('aria-expanded', 'true');
+      void sheet.offsetWidth;
+      sheet.classList.add('shown');
+      var f = sheetFocusables();
+      if (f.length) f[0].focus();
+    }
+    function closeSheet(giveFocusBack) {
+      if (!sheet || !sheetIsOpen) return;
+      sheetIsOpen = false;
+      /* cleared before toggle.focus() below, so focus can return to it */
+      setBehindInert(false);
+      sheet.classList.remove('shown');
+      document.body.classList.remove('nav-open');
+      if (toggle) toggle.setAttribute('aria-expanded', 'false');
+      var finish = function () {
+        sheet.classList.remove('open');
+        sheet.setAttribute('aria-hidden', 'true');
+        closeTimer = null;
+      };
+      if (reduce) finish();
+      else closeTimer = window.setTimeout(finish, 240);
+      if (giveFocusBack !== false && toggle) toggle.focus();
+    }
+    if (toggle) toggle.addEventListener('click', function () { sheetIsOpen ? closeSheet() : openSheet(); });
+    if (sheetClose) sheetClose.addEventListener('click', function () { closeSheet(); });
+    if (sheet) {
+      sheet.addEventListener('click', function (e) {
+        if (e.target === sheet) { closeSheet(); return; }
+        if (e.target.closest && e.target.closest('a[href]')) closeSheet(false);
+      });
+    }
+    document.addEventListener('keydown', function (e) {
+      if (!sheetIsOpen) return;
+      if (e.key === 'Escape' || e.key === 'Esc') { e.preventDefault(); closeSheet(); return; }
+      if (e.key !== 'Tab') return;
+      var f = sheetFocusables();
+      if (!f.length) return;
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+    window.addEventListener('resize', function () {
+      if (sheetIsOpen && window.innerWidth > 900) closeSheet(false);
     });
 
-    requestAnimationFrame(draw);
+    /* ---- 5 · scroll reveals — one observer, one-shot ---------------------- */
+    var heroEyebrow = $('#hero .eyebrow');
+    var revealTargets = $$('.eyebrow, .section-headline, .section-sub, .card, .case-card, .process-step, .scroll-fade')
+      .filter(function (el) { return el !== heroEyebrow; });
+
+    function reveal(el) {
+      if (el.classList.contains('section-headline')) {
+        el.classList.add('in');
+        $$('.word', el).forEach(function (w, i) {
+          if (reduce) { w.classList.add('in'); return; }
+          window.setTimeout(function () { w.classList.add('in'); }, i * 60);
+        });
+        return;
+      }
+      var d = 0;
+      if (el.hasAttribute('data-delay')) d = parseInt(el.getAttribute('data-delay'), 10) || 0;
+      else if (el.hasAttribute('data-step')) d = (parseInt(el.getAttribute('data-step'), 10) || 0) * 100;
+      if (reduce || !d) { el.classList.add('in'); return; }
+      window.setTimeout(function () { el.classList.add('in'); }, d);
+    }
+
+    if (reduce || !hasIO) {
+      revealTargets.forEach(reveal);
+    } else {
+      var revealObs = new IntersectionObserver(function (entries, obs) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          obs.unobserve(e.target);
+          reveal(e.target);
+        });
+      }, { threshold: 0.2 });
+      revealTargets.forEach(function (el) { revealObs.observe(el); });
+    }
+
+    /* ---- 6 · active process step -----------------------------------------
+       One observer over all four steps; only the best-covered step is blue,
+       so the band always has exactly one blue moment. */
+    var steps = $$('.process-step');
+    if (steps.length && hasIO) {
+      var ratios = steps.map(function () { return 0; });
+      var stepObs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          var i = steps.indexOf(e.target);
+          if (i > -1) ratios[i] = e.isIntersecting ? e.intersectionRatio : 0;
+        });
+        var best = -1, bestRatio = 0;
+        ratios.forEach(function (r, i) { if (r > bestRatio) { bestRatio = r; best = i; } });
+        steps.forEach(function (st, i) { st.classList.toggle('active-step', i === best); });
+      }, { threshold: [0, 0.25, 0.5, 0.75, 1], rootMargin: '-35% 0px -35% 0px' });
+      steps.forEach(function (st) { stepObs.observe(st); });
+    }
+
+    /* ---- 7 · count-up ----------------------------------------------------
+       Only [data-target] enters this path. The "<10 min" metric has no
+       data-target and is never touched. */
+    function countUp(el) {
+      var target = parseInt(el.getAttribute('data-target'), 10) || 0;
+      var suffix = el.getAttribute('data-suffix') || '';
+      if (reduce) { el.textContent = target + suffix; return; }
+      var dur = 1400, t0 = null;
+      function frame(ts) {
+        if (t0 === null) t0 = ts;
+        var p = Math.min((ts - t0) / dur, 1);
+        el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))) + suffix;
+        if (p < 1) window.requestAnimationFrame(frame);
+      }
+      window.requestAnimationFrame(frame);
+    }
+    var counters = $$('.metric-val[data-target]');
+    if (counters.length) {
+      if (reduce || !hasIO) {
+        counters.forEach(countUp);
+      } else {
+        var countObs = new IntersectionObserver(function (entries, obs) {
+          entries.forEach(function (e) {
+            if (!e.isIntersecting) return;
+            obs.unobserve(e.target);
+            countUp(e.target);
+          });
+        }, { threshold: 0.5 });
+        counters.forEach(function (el) { countObs.observe(el); });
+      }
+    }
+
+    /* ---- 8 · load choreography — ~1.0s ------------------------------------ */
+    var hairline   = document.getElementById('hairline');
+    var heroSub    = document.getElementById('hero-sub');
+    var statusLine = document.getElementById('status-line');
+    var heroCtas   = document.getElementById('hero-ctas');
+    var heroVisual = document.getElementById('hero-visual');
+    var heroWordEls = heroHeadline ? $$('.word', heroHeadline) : [];
+
+    if (reduce) {
+      if (nav) nav.classList.add('loaded');
+      [heroEyebrow, heroSub, statusLine, heroCtas, heroVisual].forEach(function (el) {
+        if (el) el.classList.add('in');
+      });
+      heroWordEls.forEach(function (w) { w.classList.add('in'); });
+      /* No hairline flourish and no rAF is ever registered. The ticker DOES
+         still run: styles.css §20 collapses its transition to .01ms, so the
+         swap is an instant cut with no motion, and all four contract phrases
+         become readable instead of only the first. */
+      if (phraseEls.length > 1) window.setInterval(cyclePhrase, 2200);
+    } else {
+      if (hairline) {
+        window.requestAnimationFrame(function () { hairline.classList.add('in'); });
+        window.setTimeout(function () { hairline.classList.add('out'); }, 620);
+        window.setTimeout(function () { hairline.style.display = 'none'; }, 940);
+      }
+      window.setTimeout(function () { if (nav) nav.classList.add('loaded'); }, 120);
+      window.setTimeout(function () { if (heroEyebrow) heroEyebrow.classList.add('in'); }, 200);
+      heroWordEls.forEach(function (w, i) {
+        window.setTimeout(function () { w.classList.add('in'); }, 240 + i * 50);
+      });
+      window.setTimeout(function () { if (heroVisual) heroVisual.classList.add('in'); }, 320);
+      window.setTimeout(function () { if (heroSub) heroSub.classList.add('in'); }, 700);
+      window.setTimeout(function () {
+        if (statusLine) statusLine.classList.add('in');
+        if (phraseEls.length > 1) window.setInterval(cyclePhrase, 2200);
+      }, 820);
+      window.setTimeout(function () { if (heroCtas) heroCtas.classList.add('in'); }, 920);
+      window.setTimeout(function () { schematic.activate(); }, 1000);
+    }
+
+    /* ---- 9 · icons last --------------------------------------------------
+       Guarded and placed after every observer and timer, so a CDN failure
+       costs icons only. Every plate has a fixed pixel size, so it cannot
+       shift the layout either. */
+    if (window.lucide && typeof window.lucide.createIcons === 'function') {
+      window.lucide.createIcons();
+    }
   }
-  draw();
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+
 })();
-
-
-// ─── PAGE LOAD SEQUENCE ───
-const hairline=document.getElementById('hairline');
-window.addEventListener('load',()=>{
-  // 1. Hairline draw
-  hairline.style.opacity='1';
-  hairline.style.transition='transform .6s cubic-bezier(.65,0,.35,1)';
-  hairline.style.transform='scaleX(1)';
-  setTimeout(()=>{
-    hairline.style.transition='opacity .4s';
-    hairline.style.opacity='0';
-  },700);
-  // 2. Nav fade-in
-  setTimeout(()=>nav.classList.add('loaded'),400);
-  // 3. Hero headline words
-  const words=heroHL.querySelectorAll('.word');
-  const heroEyebrow=document.querySelector('#hero .eyebrow');
-  setTimeout(()=>{
-    heroEyebrow.classList.add('in');
-    words.forEach((w,i)=>{
-      setTimeout(()=>w.classList.add('in'),i*80);
-    });
-  },600);
-  // 4. Sub-headline
-  const heroSub=document.getElementById('hero-sub');
-  setTimeout(()=>heroSub.classList.add('in'),(words.length*80)+600+200);
-  // 5. Status line
-  const sl=document.getElementById('status-line');
-  setTimeout(()=>sl.classList.add('in'),(words.length*80)+600+400);
-  // 6. CTAs
-  const ctas=document.getElementById('hero-ctas');
-  setTimeout(()=>ctas.classList.add('in'),(words.length*80)+600+600);
-  // 7. Hero visual
-  const hv=document.getElementById('hero-visual');
-  setTimeout(()=>{
-    hv.classList.add('in');
-    document.querySelectorAll('.schematic-path').forEach((p,i)=>{
-      const l=parseFloat(p.style.getPropertyValue('--l'))||400;
-      p.style.strokeDasharray=l;
-      p.style.strokeDashoffset=l;
-      setTimeout(()=>{
-        p.style.transition='stroke-dashoffset 1.2s cubic-bezier(.65,0,.35,1)';
-        p.style.strokeDashoffset='0';
-      },800+i*55);
-    });
-  },800);
-});
-
-// ─── INTERSECTION OBSERVER ───
-const io=new IntersectionObserver((entries)=>{
-  entries.forEach(entry=>{
-    if(!entry.isIntersecting) return;
-    const el=entry.target;
-    if(el.classList.contains('eyebrow')) {setTimeout(()=>el.classList.add('in'),0); io.unobserve(el); return;}
-    if(el.classList.contains('section-headline')){
-      el.querySelectorAll('.word').forEach((w,i)=>setTimeout(()=>w.classList.add('in'),i*60));
-      io.unobserve(el); return;
-    }
-    if(el.classList.contains('card')){
-      const d=parseInt(el.dataset.delay||0);
-      setTimeout(()=>el.classList.add('in'),d);
-      io.unobserve(el); return;
-    }
-    if(el.classList.contains('case-card')){
-      const d=parseInt(el.dataset.delay||0);
-      setTimeout(()=>el.classList.add('in'),d);
-      io.unobserve(el); return;
-    }
-    if(el.classList.contains('process-step')){
-      setTimeout(()=>el.classList.add('in'),parseInt(el.dataset.step||0)*100);
-      io.unobserve(el); return;
-    }
-    el.classList.add('in');
-    io.unobserve(el);
-  });
-},{threshold:0.2});
-
-document.querySelectorAll('.eyebrow:not(#hero .eyebrow),.section-headline,.section-sub,.card,.case-card,.process-step,.scroll-fade').forEach(el=>io.observe(el));
-
-// ─── PROCESS SVG LINE (scroll-driven) ───
-const processSection=document.getElementById('how-we-work');
-const drawLine=document.getElementById('process-draw-line');
-let lineDrawn=false;
-const processIO=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting&&!lineDrawn){
-      lineDrawn=true;
-      drawLine.style.transition='stroke-dashoffset 3s ease-in-out';
-      drawLine.style.strokeDashoffset='0';
-    }
-  });
-},{threshold:0.1});
-if(processSection) processIO.observe(processSection);
-
-// ─── ACTIVE PROCESS STEP ───
-document.querySelectorAll('.process-step').forEach((step,i)=>{
-  const stepIO=new IntersectionObserver(entries=>{
-    entries.forEach(e=>{
-      const numEl=step.querySelector('.step-num');
-      if(e.isIntersecting) numEl.classList.add('active-step');
-      else numEl.classList.remove('active-step');
-    });
-  },{threshold:0.5,rootMargin:'-30% 0px -30% 0px'});
-  stepIO.observe(step);
-});
-
-// ─── COUNT-UP METRICS ───
-const countIO=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(!e.isIntersecting) return;
-    const el=e.target;
-    const target=parseInt(el.dataset.target);
-    const suffix=el.dataset.suffix||'';
-    const dur=1400;
-    const start=performance.now();
-    function frame(now){
-      const elapsed=now-start;
-      const progress=Math.min(elapsed/dur,1);
-      const eased=1-Math.pow(1-progress,3);
-      const val=Math.round(eased*target);
-      el.textContent=val+suffix;
-      if(progress<1) requestAnimationFrame(frame);
-    }
-    requestAnimationFrame(frame);
-    countIO.unobserve(el);
-  });
-},{threshold:0.5});
-document.querySelectorAll('.metric-val[data-target]').forEach(el=>countIO.observe(el));
-
-// ─── FORM FILLED STATE ───
-function checkFilled(input){
-  const grp=input.closest('.form-group');
-  grp.classList.toggle('filled',input.value.length>0);
-}
-
-// ─── CARD SVG BORDERS (set perimeter) ───
-// Using CSS approach - no JS needed for the clockwise effect with stroke-dasharray animation
-
 </script>
+
 </body>
 </html>
